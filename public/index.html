@@ -1,0 +1,888 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ВОРТЕКС — работа, жильё, питомцы</title>
+  <style>
+    :root {
+      --ink: #18231f;
+      --muted: #68756e;
+      --line: #e3e9e5;
+      --green: #155e4b;
+      --light: #eaf4ee;
+      --white: #fff;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: #f7f9f7;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    .container {
+      width: min(1100px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    .topbar {
+      background: var(--white);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .nav {
+      min-height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--ink);
+      font-size: 20px;
+      font-weight: 800;
+      text-decoration: none;
+    }
+
+    .logo {
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      border-radius: 11px;
+      color: white;
+      background: var(--green);
+    }
+
+    .nav-caption, .muted, .result-count, .footer {
+      color: var(--muted);
+    }
+
+    .button {
+      border: 0;
+      border-radius: 10px;
+      padding: 11px 16px;
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .button.dark {
+      color: white;
+      background: var(--green);
+    }
+
+    .button.light {
+      color: var(--ink);
+      background: #edf1ee;
+    }
+
+    .hero {
+      margin: 32px 0 30px;
+      padding: 32px;
+      border-radius: 24px;
+      background: var(--light);
+    }
+
+    .eyebrow {
+      color: var(--green);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 12px 0;
+      font-size: clamp(32px, 5vw, 52px);
+      line-height: 1.08;
+    }
+
+    h1 span { color: var(--green); }
+
+    .hero-copy {
+      max-width: 600px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .filters {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      gap: 12px;
+      margin-top: 24px;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      font-size: 14px;
+      font-weight: 650;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      border: 1px solid #d6ded8;
+      border-radius: 10px;
+      padding: 12px;
+      color: var(--ink);
+      background: white;
+      font: inherit;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      outline: 2px solid #9dc9b7;
+      border-color: var(--green);
+    }
+
+    .section-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    h2 { margin: 0 0 5px; }
+
+    .result-count { margin: 0; font-size: 14px; }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .card {
+      min-height: 220px;
+      display: flex;
+      flex-direction: column;
+      padding: 20px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: white;
+    }
+
+    .card-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .tag {
+      padding: 5px 9px;
+      border-radius: 99px;
+      font-size: 12px;
+      font-weight: 750;
+      white-space: nowrap;
+    }
+
+    .tag-jobs { color: #2454a6; background: #eaf1ff; }
+    .tag-housing { color: #8a5b08; background: #fff3d8; }
+    .tag-pets { color: #8b3e7b; background: #f9eafa; }
+    .tag-other { color: var(--muted); background: #edf1ee; }
+
+    .location {
+      color: var(--muted);
+      font-size: 13px;
+      text-align: right;
+    }
+
+    .card h3 { margin: 17px 0 8px; font-size: 18px; }
+    .description { margin: 0 0 16px; color: var(--muted); line-height: 1.5; }
+
+    .card-bottom {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: auto;
+      padding-top: 12px;
+    }
+
+    .price { font-weight: 750; }
+    .contact-link { color: var(--green); font-weight: 750; text-decoration: none; }
+
+    .empty {
+      padding: 28px;
+      border: 1px dashed #bdc9c1;
+      border-radius: 14px;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    .empty[hidden] { display: none; }
+
+    .footer {
+      padding: 28px 0;
+      font-size: 13px;
+    }
+
+    dialog {
+      width: min(600px, calc(100% - 28px));
+      padding: 0;
+      border: 0;
+      border-radius: 18px;
+      box-shadow: 0 20px 70px #13251c40;
+    }
+
+    dialog::backdrop { background: #101b1680; }
+    dialog form { padding: 24px; }
+
+    .dialog-head, .dialog-actions {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .dialog-head { margin-bottom: 20px; }
+    .dialog-head h2 { margin: 5px 0 0; }
+
+    .close-button {
+      border: 0;
+      border-radius: 8px;
+      padding: 6px 10px;
+      background: #edf1ee;
+      font-size: 20px;
+      cursor: pointer;
+    }
+
+    .dialog-fields {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .full { grid-column: 1 / -1; }
+    textarea { min-height: 100px; resize: vertical; }
+    .hint { color: var(--muted); font-size: 13px; line-height: 1.5; }
+    .dialog-actions { justify-content: end; margin-top: 18px; }
+
+    @media (max-width: 760px) {
+      .filters { grid-template-columns: 1fr 1fr; }
+      .filters .field:first-child { grid-column: 1 / -1; }
+      .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 520px) {
+      .nav-caption { display: none; }
+      .hero { padding: 22px; }
+      .filters, .cards, .dialog-fields { grid-template-columns: 1fr; }
+      .filters .field:first-child, .full { grid-column: auto; }
+    }
+  </style>
+
+<style id="vortex-design">
+:root {
+  --ink: #f3f0e9;
+  --muted: #a3a8ad;
+  --line: #353b41;
+  --green: #f0e3c9;
+  --light: #20252a;
+  --white: #1c2126;
+}
+
+body {
+  color: var(--ink);
+  background: radial-gradient(ellipse at top, #20252a 0, #101316 55%);
+}
+
+.topbar {
+  background: rgba(16, 19, 22, .92);
+  border-bottom: 1px solid rgba(255,255,255,.08);
+  backdrop-filter: blur(16px);
+}
+
+.brand { color: #f5f1e9; font-weight: 850; letter-spacing: .05em; }
+.logo { color: #17191b; background: var(--green); border-radius: 13px; }
+.nav-caption { color: var(--muted); }
+
+.button { border-radius: 13px; }
+.button.dark {
+  color: #17191b;
+  background: var(--green);
+  box-shadow: 0 6px 22px rgba(240,227,201,.16);
+}
+.button.light { color: var(--ink); background: #30363c; }
+
+.hero {
+  color: var(--ink);
+  background: linear-gradient(135deg, #22282e, #191e23);
+  border: 1px solid rgba(255,255,255,.08);
+  box-shadow: 0 18px 50px rgba(0,0,0,.18);
+}
+.eyebrow { color: var(--green); }
+h1 span { color: var(--green); }
+.hero-copy, .result-count, .footer { color: var(--muted); }
+
+.field { color: #e4e1da; }
+input, select, textarea {
+  color: var(--ink);
+  background: #252b30;
+  border-color: #3c4349;
+  border-radius: 13px;
+}
+input::placeholder, textarea::placeholder { color: #969ca2; }
+input:focus, select:focus, textarea:focus {
+  outline: 2px solid #d7c7a7;
+  border-color: var(--green);
+}
+
+.section-head h2 { color: var(--ink); }
+.cards { gap: 14px; }
+.card {
+  position: relative;
+  min-height: 290px;
+  padding: 0;
+  overflow: hidden;
+  color: var(--ink);
+  background: #20252a;
+  border: 1px solid rgba(255,255,255,.09);
+  border-radius: 20px;
+  box-shadow: 0 12px 30px rgba(0,0,0,.18);
+}
+
+.card::before {
+  content: "";
+  display: block;
+  flex: 0 0 128px;
+  height: 128px;
+  background:
+    linear-gradient(135deg, #5b6060, #272c31);
+  background-size: cover;
+  background-position: center;
+}
+
+.card:has(.tag-jobs)::before {
+  background-image:
+    linear-gradient(0deg, rgba(15,18,21,.25), rgba(15,18,21,.05)),
+    url("https://images.unsplash.com/photo-1521737711867-e3b97375f902?auto=format&fit=crop&w=480&q=55");
+}
+.card:has(.tag-housing)::before {
+  background-image:
+    linear-gradient(0deg, rgba(15,18,21,.25), rgba(15,18,21,.05)),
+    url("https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=480&q=55");
+}
+.card:has(.tag-pets)::before {
+  background-image:
+    linear-gradient(0deg, rgba(15,18,21,.25), rgba(15,18,21,.05)),
+    url("https://images.unsplash.com/photo-1552053831-71594a27632d?auto=format&fit=crop&w=480&q=55");
+}
+
+.card-top {
+  position: relative;
+  height: 128px;
+  margin: -128px 14px 0;
+  padding-top: 13px;
+  align-items: flex-start;
+}
+.card-top .location {
+  color: white;
+  font-weight: 650;
+  text-shadow: 0 1px 5px #000;
+}
+.tag { border-radius: 99px; }
+.tag-jobs { color: #e1eaff; background: #334467; }
+.tag-housing { color: #ffe8b7; background: #574725; }
+.tag-pets { color: #ffd8f5; background: #583952; }
+
+.card h3 { margin: 16px 16px 7px; color: var(--ink); }
+.card .description {
+  margin: 0 16px 14px;
+  color: #b5bac0;
+}
+.card-bottom {
+  margin: auto 16px 0;
+  padding: 12px 0 16px;
+  border-top: 1px solid rgba(255,255,255,.09);
+}
+.card .price { color: var(--green); }
+.contact-link { color: var(--green); }
+.empty {
+  color: var(--muted);
+  background: #1c2126;
+  border-color: #454c53;
+}
+
+dialog {
+  color: var(--ink);
+  background: #1c2126;
+  border: 1px solid #3a4147;
+  border-radius: 20px;
+}
+dialog::backdrop { background: rgba(0,0,0,.72); }
+dialog form { color: var(--ink); }
+.dialog-head h2 { color: var(--ink); }
+.close-button { color: var(--ink); background: #30363c; }
+.hint { color: var(--muted); }
+
+.vortex-mobile-nav { display: none; }
+
+@media (max-width: 760px) {
+  .nav-caption { display: none; }
+  .nav .button { padding: 10px 12px; font-size: 14px; }
+  .hero { padding: 22px; }
+  h1 { font-size: 35px; }
+  .filters { grid-template-columns: 1fr; }
+  .filters .field:first-child { grid-column: auto; }
+
+  .cards {
+    display: flex;
+    overflow-x: auto;
+    padding-bottom: 8px;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+  }
+  .cards::-webkit-scrollbar { display: none; }
+  .card {
+    flex: 0 0 82vw;
+    max-width: 310px;
+    scroll-snap-align: start;
+  }
+
+  body { padding-bottom: 100px; }
+  .vortex-mobile-nav {
+    position: fixed;
+    z-index: 50;
+    left: 50%;
+    bottom: calc(10px + env(safe-area-inset-bottom));
+    transform: translateX(-50%);
+    display: flex;
+    width: min(calc(100% - 28px), 430px);
+    justify-content: space-around;
+    padding: 8px;
+    border: 1px solid rgba(255,255,255,.1);
+    border-radius: 20px;
+    background: rgba(29,33,38,.94);
+    box-shadow: 0 12px 35px rgba(0,0,0,.4);
+    backdrop-filter: blur(15px);
+  }
+  .vortex-mobile-nav button {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    padding: 5px 2px;
+    border: 0;
+    color: #a3a8ad;
+    background: transparent;
+    font: inherit;
+    cursor: pointer;
+  }
+  .vortex-mobile-nav button span { font-size: 21px; line-height: 1.1; }
+  .vortex-mobile-nav button small { font-size: 10px; }
+  .vortex-mobile-nav button.active { color: var(--green); }
+}
+</style>
+
+<style>.vortex-mark{width:52px;height:52px;flex:0 0 52px;background-color:#050607;background-image:url("./vortex-logo.jpg");background-repeat:no-repeat;background-size:120px 120px;background-position:center -12px;border-radius:13px}</style>  <link rel="stylesheet" href="./settings.css">
+  <link rel="stylesheet" href="./animations.css?v=1">
+  <link rel="stylesheet" href="./liquid-glass.css?v=1">
+  <link rel="stylesheet" href="./performance.css?v=1">
+  <link rel="stylesheet" href="./sections.css?v=1">
+  <link rel="stylesheet" href="./category-layout.css?v=1">
+  <link rel="stylesheet" href="./listing-image.css?v=2">
+</head>
+<body>
+  <header class="topbar">
+    <div class="container nav">
+      <a class="brand" href="./">
+        <span class="logo vortex-mark" aria-hidden="true"></span><span>ВОРТЕКС</span>
+      </a>
+      <span class="nav-caption">Работа · жильё · питомцы</span>
+      <button class="button dark" id="openDialog" type="button">+ Разместить</button>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <div class="eyebrow">Объявления в одном месте</div>
+      <h1>Работа, жильё,<br><span>питомцы — рядом.</span></h1>
+      <p class="hero-copy">Ищите вакансии, квартиры и объявления о поиске или пристройстве питомцев.</p>
+
+      <div class="filters">
+        <label class="field">
+          <span>Что ищете?</span>
+          <input id="query" type="search" placeholder="Должность, квартира, питомец...">
+        </label>
+        <label class="field">
+          <span>Город</span>
+          <input id="city" type="text" placeholder="Например, Москва">
+        </label>
+        <label class="field">
+          <span>Раздел</span>
+          <select id="categoryFilter">
+            <option value="all">Все разделы</option>
+            <option value="jobs">Работа</option>
+            <option value="housing">Жильё</option>
+            <option value="pets">Питомцы</option>
+          </select>
+        </label>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-head">
+        <div>
+          <h2>Объявления</h2>
+          <p class="result-count" id="resultCount"></p>
+        </div>
+      </div>
+      <div class="cards" id="cards"></div>
+      <p class="empty" id="emptyState" hidden>Ничего не найдено. Попробуйте изменить запрос.</p>
+    </section>
+
+    <footer class="footer">
+      Демо-версия: добавленные объявления сохраняются только в этом браузере.
+    </footer>
+  </main>
+
+  <dialog id="listingDialog">
+    <form id="listingForm">
+      <div class="dialog-head">
+        <div>
+          <div class="eyebrow">Новое объявление</div>
+          <h2>Разместить объявление</h2>
+        </div>
+        <button class="close-button" id="closeDialog" type="button" aria-label="Закрыть">×</button>
+      </div>
+
+      <div class="dialog-fields">
+        <label class="field">
+          <span>Раздел</span>
+          <select name="category" required>
+            <option value="jobs">Работа</option>
+            <option value="housing">Жильё</option>
+            <option value="pets">Питомцы</option>
+          </select>
+        </label>
+
+        <label class="field">
+          <span>Город</span>
+          <input name="location" required maxlength="60" placeholder="Например, Казань">
+        </label>
+
+        <label class="field full">
+          <span>Заголовок</span>
+          <input name="title" required maxlength="90" placeholder="Коротко опишите объявление">
+        </label>
+
+        <label class="field full">
+          <span>Описание</span>
+          <textarea name="description" required maxlength="600" placeholder="Добавьте подробности"></textarea>
+        </label>
+
+        <label class="field">
+          <span>Цена или зарплата</span>
+          <input name="price" maxlength="50" placeholder="Необязательно">
+        </label>
+
+        <label class="field">
+          <span>Контакт</span>
+          <input name="contact" required maxlength="120" placeholder="email@example.com">
+        </label>
+      </div>
+
+      
+      <div class="vx-image-area">
+        <label class="vx-image-field">
+          <span>Фото объявления — необязательно</span>
+          <input id="listingImageFile" type="file" accept="image/*">
+        </label>
+        <div id="listingImagePreview" class="vx-image-preview" hidden>
+          <img id="listingImagePreviewImg" alt="Предпросмотр фото">
+          <div class="vx-image-preview-info">
+            <span id="listingImageStatus" role="status"></span>
+            <button id="removeListingImage" type="button">Убрать фото</button>
+          </div>
+        </div>
+      </div>
+      <input id="listingImageData" name="image" type="hidden" value="">
+<p class="hint">Это демонстрация: объявление будет видно только в вашем браузере.</p>
+      <div class="dialog-actions">
+        <button class="button light" id="cancelDialog" type="button">Отмена</button>
+        <button class="button dark" type="submit">Добавить</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script>
+    const seedListings = [
+      {
+        category: "jobs",
+        title: "Frontend-разработчик",
+        location: "Москва",
+        description: "Продуктовая команда, гибридный формат работы.",
+        price: "От 180 000 ₽/мес.",
+        contact: "jobs@example.com"
+      },
+      {
+        category: "jobs",
+        title: "Дизайнер продукта",
+        location: "Казань",
+        description: "Ищем дизайнера в небольшую команду цифрового продукта.",
+        price: "От 140 000 ₽/мес.",
+        contact: "design@example.com"
+      },
+      {
+        category: "housing",
+        title: "Студия рядом с метро",
+        location: "Москва",
+        description: "Светлая студия, долгосрочная аренда. Подробности по контакту.",
+        price: "55 000 ₽/мес.",
+        contact: "rent@example.com"
+      },
+      {
+        category: "housing",
+        title: "Комната в спокойном районе",
+        location: "Казань",
+        description: "Комната в квартире, рядом магазины и остановка.",
+        price: "25 000 ₽/мес.",
+        contact: "room@example.com"
+      },
+      {
+        category: "pets",
+        title: "Кошка ищет семью",
+        location: "Москва",
+        description: "Ласковая кошка ищет заботливый дом. Пристройство.",
+        price: "",
+        contact: "pets@example.com"
+      },
+      {
+        category: "pets",
+        title: "Помогите найти дом щенку",
+        location: "Казань",
+        description: "Щенок ищет ответственных хозяев. Подробности по контакту.",
+        price: "",
+        contact: "home@example.com"
+      }
+    ];
+
+    const categoryLabels = {
+      jobs: "Работа",
+      housing: "Жильё",
+      pets: "Питомцы"
+    };
+    const storageKey = "ryadom-demo-listings-v1";
+
+    function readListings() {
+      try {
+        const saved = localStorage.getItem(storageKey);
+        if (!saved) return [...seedListings];
+
+        const parsed = JSON.parse(saved);
+        return Array.isArray(parsed) ? parsed : [...seedListings];
+      } catch {
+        return [...seedListings];
+      }
+    }
+
+    let listings = readListings();
+
+    function escapeHTML(value) {
+      const replacements = {
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+      };
+
+      return String(value ?? "").replace(/[&<>"']/g, char => replacements[char]);
+    }
+
+    function contactHref(value) {
+      const contact = String(value || "").trim();
+
+      if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contact)) {
+        return "mailto:" + contact;
+      }
+
+      if (/^\+?[\d\s()\-]{7,}$/.test(contact) && contact.replace(/\D/g, "").length >= 7) {
+        return "tel:" + contact.replace(/[^\d+]/g, "");
+      }
+
+      return "";
+    }
+
+    function renderCard(item) {
+      const category = ["jobs", "housing", "pets"].includes(item.category)
+        ? item.category
+        : "other";
+      const label = categoryLabels[category] || "Объявление";
+      const href = contactHref(item.contact);
+      const contact = href
+        ? `<a class="contact-link" href="${escapeHTML(href)}">Связаться →</a>`
+        : `<span class="muted">${escapeHTML(item.contact || "Контакт не указан")}</span>`;
+
+      return `
+        <article class="card${item.image ? " has-custom-image" : ""}">
+          ${item.image ? '<img class="card-image" src="' + escapeHTML(item.image) + '" alt="" loading="lazy" decoding="async">' : ""}
+          <div class="card-top">
+            <span class="tag tag-${category}">${escapeHTML(label)}</span>
+            <span class="location">${escapeHTML(item.location || "")}</span>
+          </div>
+          <h3>${escapeHTML(item.title || "Без заголовка")}</h3>
+          <p class="description">${escapeHTML(item.description || "")}</p>
+          <div class="card-bottom">
+            <span class="price">${escapeHTML(item.price || "")}</span>
+            ${contact}
+          </div>
+        </article>
+      `;
+    }
+
+    function render() {
+      const query = document.getElementById("query").value.trim().toLocaleLowerCase("ru");
+      const city = document.getElementById("city").value.trim().toLocaleLowerCase("ru");
+      const category = document.getElementById("categoryFilter").value;
+
+      const filtered = listings.filter(item => {
+        const searchable = [
+          item.title,
+          item.description,
+          item.location,
+          item.price,
+          categoryLabels[item.category]
+        ].join(" ").toLocaleLowerCase("ru");
+
+        const place = String(item.location || "").toLocaleLowerCase("ru");
+
+        return (!query || searchable.includes(query))
+          && (!city || place.includes(city))
+          && (category === "all" || item.category === category);
+      });
+
+      document.getElementById("resultCount").textContent = `Найдено: ${filtered.length}`;
+      document.getElementById("cards").innerHTML = filtered.map(renderCard).join("");
+      document.getElementById("emptyState").hidden = filtered.length !== 0;
+    }
+
+    document.getElementById("query").addEventListener("input", render);
+    document.getElementById("city").addEventListener("input", render);
+    document.getElementById("categoryFilter").addEventListener("change", render);
+
+    const dialog = document.getElementById("listingDialog");
+    const form = document.getElementById("listingForm");
+
+    document.getElementById("openDialog").addEventListener("click", () => dialog.showModal());
+    document.getElementById("closeDialog").addEventListener("click", () => dialog.close());
+    document.getElementById("cancelDialog").addEventListener("click", () => dialog.close());
+
+    form.addEventListener("submit", event => {
+      event.preventDefault();
+
+      const data = new FormData(form);
+      const get = name => String(data.get(name) || "").trim();
+
+      const listing = {
+        category: get("category"),
+        title: get("title"),
+        location: get("location"),
+        description: get("description"),
+        price: get("price"),
+        contact: get("contact"),
+        image: get("image")
+      };
+
+      const updatedListings = [listing, ...listings];
+
+      try {
+        localStorage.setItem(storageKey, JSON.stringify(updatedListings));
+      } catch {
+        alert("Не удалось сохранить объявление в этом браузере.");
+        return;
+      }
+
+      listings = updatedListings;
+      form.reset();
+      dialog.close();
+
+      document.getElementById("query").value = "";
+      document.getElementById("city").value = "";
+      document.getElementById("categoryFilter").value = "all";
+
+      render();
+    });
+
+    render();
+  </script>
+
+<nav id="vortex-mobile-nav" class="vortex-mobile-nav" aria-label="Навигация">
+  <button type="button" class="active" data-vortex-action="home"><span>⌂</span><small>Главная</small></button>
+  <button type="button" data-vortex-action="search"><span>⌕</span><small>Поиск</small></button>
+  <button type="button" data-vortex-action="pets"><span>♡</span><small>Питомцы</small></button>
+  <button type="button" data-vortex-action="add"><span>＋</span><small>Подать</small></button>
+</nav>
+<script id="vortex-mobile-nav-script">
+(() => {
+  const nav = document.getElementById("vortex-mobile-nav");
+  if (!nav) return;
+
+  nav.querySelectorAll("[data-vortex-action]").forEach(button => {
+    button.addEventListener("click", () => {
+      nav.querySelectorAll("button").forEach(item => {
+        item.classList.toggle("active", item === button);
+      });
+
+      const action = button.dataset.vortexAction;
+      const category = document.getElementById("categoryFilter");
+
+      if (action === "home") {
+        ["query", "city"].forEach(id => {
+          const field = document.getElementById(id);
+          if (field) {
+            field.value = "";
+            field.dispatchEvent(new Event("input"));
+          }
+        });
+        if (category) {
+          category.value = "all";
+          category.dispatchEvent(new Event("change"));
+        }
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+
+      if (action === "search") {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+        document.getElementById("query")?.focus();
+      }
+
+      if (action === "pets" && category) {
+        category.value = "pets";
+        category.dispatchEvent(new Event("change"));
+        document.getElementById("cards")?.scrollIntoView({ behavior: "smooth" });
+      }
+
+      if (action === "add") {
+        document.getElementById("openDialog")?.click();
+      }
+    });
+  });
+})();
+</script>
+
+  <script src="./settings.js" defer></script>
+  <script src="./profile.js?v=1" defer></script>
+  <script src="./profile-edit.js?v=1" defer></script>
+  <script src="./aurora.js?v=2" defer></script>
+  <script src="./subscriptions.js?v=1" defer></script>
+  <script src="./pricing.js?v=3" defer></script>
+  <script src="./sections.js?v=1" defer></script>
+  <script src="./listing-image.js?v=2" defer></script>
+  <script src="./profile-avatar.js?v=1" defer></script>
+  <script src="./favorites.js?v=2" defer></script>
+  <script>try { localStorage.removeItem("vortex-privacy-v1"); } catch (_) {}</script>
+</body>
+</html>

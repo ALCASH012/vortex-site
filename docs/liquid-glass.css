@@ -1,0 +1,204 @@
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  background: rgba(18, 22, 27, .62) !important;
+  border-bottom: 1px solid rgba(255,255,255,.16) !important;
+  box-shadow: 0 8px 30px rgba(0,0,0,.12);
+  -webkit-backdrop-filter: blur(24px) saturate(170%);
+  backdrop-filter: blur(24px) saturate(170%);
+}
+
+.hero {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  border: 1px solid rgba(255,255,255,.2) !important;
+  background:
+    linear-gradient(135deg, rgba(255,255,255,.12), rgba(255,255,255,.035) 55%),
+    rgba(30,35,41,.58) !important;
+  box-shadow:
+    inset 0 1px 1px rgba(255,255,255,.2),
+    0 20px 60px rgba(0,0,0,.2);
+  -webkit-backdrop-filter: blur(26px) saturate(160%);
+  backdrop-filter: blur(26px) saturate(160%);
+}
+
+.hero::before {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: linear-gradient(
+    115deg,
+    rgba(255,255,255,.16),
+    transparent 30%,
+    transparent 68%,
+    rgba(255,255,255,.07)
+  );
+  background-size: 220% 220%;
+  animation: vx-glass-shimmer 16s ease-in-out infinite alternate;
+}
+
+.hero > * {
+  position: relative;
+  z-index: 1;
+}
+
+.card {
+  isolation: isolate;
+  border: 1px solid rgba(255,255,255,.17) !important;
+  background: rgba(35,40,46,.68) !important;
+  box-shadow:
+    inset 0 1px 1px rgba(255,255,255,.13),
+    0 14px 36px rgba(0,0,0,.2);
+  -webkit-backdrop-filter: blur(20px) saturate(150%);
+  backdrop-filter: blur(20px) saturate(150%);
+}
+
+.card::after {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  inset: 0 0 auto;
+  height: 140px;
+  pointer-events: none;
+  background: linear-gradient(
+    125deg,
+    rgba(255,255,255,.2),
+    transparent 45%,
+    rgba(255,255,255,.03)
+  );
+}
+
+.card-top,
+.card h3,
+.card .description,
+.card-bottom {
+  position: relative;
+  z-index: 2;
+}
+
+.vortex-mobile-nav {
+  border: 1px solid rgba(255,255,255,.2) !important;
+  background: rgba(30,35,41,.65) !important;
+  box-shadow:
+    inset 0 1px 1px rgba(255,255,255,.17),
+    0 14px 40px rgba(0,0,0,.35);
+  -webkit-backdrop-filter: blur(26px) saturate(170%);
+  backdrop-filter: blur(26px) saturate(170%);
+}
+
+input:not([type="checkbox"]):not([type="color"]),
+select,
+textarea {
+  background: rgba(255,255,255,.075) !important;
+  border-color: rgba(255,255,255,.17) !important;
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+}
+
+.button.dark,
+#vx-save,
+#vx-profile-add {
+  border: 1px solid rgba(255,255,255,.45);
+  background: rgba(240,227,201,.88) !important;
+  box-shadow:
+    inset 0 1px 1px rgba(255,255,255,.7),
+    0 8px 24px rgba(240,227,201,.12);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+}
+
+#vx-dialog,
+.settings-dialog,
+dialog {
+  border: 1px solid rgba(255,255,255,.2);
+  background: rgba(28,33,38,.78) !important;
+  box-shadow:
+    inset 0 1px 1px rgba(255,255,255,.13),
+    0 25px 80px rgba(0,0,0,.45);
+  -webkit-backdrop-filter: blur(28px) saturate(160%);
+  backdrop-filter: blur(28px) saturate(160%);
+}
+
+.vx-profile-page {
+  border: 1px solid rgba(255,255,255,.18) !important;
+  background: rgba(30,35,41,.72) !important;
+  box-shadow:
+    inset 0 1px 1px rgba(255,255,255,.14),
+    0 20px 55px rgba(0,0,0,.22);
+  -webkit-backdrop-filter: blur(24px) saturate(160%);
+  backdrop-filter: blur(24px) saturate(160%);
+}
+
+.vx-gear,
+.settings-open-button {
+  border: 1px solid rgba(255,255,255,.2) !important;
+  background: rgba(255,255,255,.09) !important;
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+}
+
+body.light-theme .topbar {
+  background: rgba(255,255,255,.66) !important;
+  border-color: rgba(255,255,255,.8) !important;
+}
+
+body.light-theme .hero {
+  background:
+    linear-gradient(135deg, rgba(255,255,255,.65), rgba(255,255,255,.15)),
+    rgba(225,235,229,.66) !important;
+  border-color: rgba(255,255,255,.78) !important;
+}
+
+body.light-theme .card {
+  background: rgba(255,255,255,.62) !important;
+  border-color: rgba(255,255,255,.85) !important;
+}
+
+body.light-theme .vortex-mobile-nav {
+  background: rgba(255,255,255,.68) !important;
+  border-color: rgba(255,255,255,.85) !important;
+}
+
+body.light-theme input:not([type="checkbox"]):not([type="color"]),
+body.light-theme select,
+body.light-theme textarea {
+  background: rgba(255,255,255,.62) !important;
+  border-color: rgba(255,255,255,.85) !important;
+}
+
+body.light-theme #vx-dialog,
+body.light-theme .settings-dialog,
+body.light-theme dialog {
+  background: rgba(255,255,255,.8) !important;
+  border-color: rgba(255,255,255,.9);
+}
+
+body.light-theme .vx-profile-page {
+  background: rgba(255,255,255,.72) !important;
+  border-color: rgba(255,255,255,.9) !important;
+}
+
+@keyframes vx-glass-shimmer {
+  from { background-position: 0% 40%; }
+  to { background-position: 100% 60%; }
+}
+
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .topbar { background: rgba(18,22,27,.94) !important; }
+  .hero, .card, .vortex-mobile-nav, #vx-dialog, .settings-dialog, dialog {
+    background-color: rgba(28,33,38,.96) !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero::before { animation: none; }
+}
+
+body.vx-reduce-motion .hero::before {
+  animation: none !important;
+}

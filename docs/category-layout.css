@@ -1,0 +1,20 @@
+/* Скрываем только выпадающий список раздела, сохраняя его для работы фильтров */
+.hero .filters > .field:last-child {
+  display: none !important;
+}
+
+/* На компьютере остаются поиск и город */
+.hero .filters {
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr) !important;
+}
+
+/* На телефоне поиск и город располагаются друг под другом */
+@media (max-width: 760px) {
+  .hero .filters {
+    grid-template-columns: 1fr !important;
+  }
+
+  .hero .filters > .field {
+    grid-column: 1 / -1 !important;
+  }
+}

@@ -1,0 +1,78 @@
+html {
+  scroll-behavior: smooth;
+}
+
+/* Не перерисовываем весь экран при прокрутке */
+html body {
+  background-attachment: scroll !important;
+}
+
+/* Карточки не должны заново проигрывать анимацию при каждом поиске */
+#cards > .card {
+  animation: none !important;
+  content-visibility: auto;
+  contain-intrinsic-size: auto 320px;
+}
+
+/* Оставляем короткие плавные переходы */
+.card,
+.button,
+button {
+  transition: transform .18s ease, border-color .18s ease, opacity .18s ease;
+}
+
+@media (max-width: 760px) {
+  /* На телефоне отключаем постоянные фоновые анимации */
+  html body {
+    animation: none !important;
+    background-attachment: scroll !important;
+  }
+
+  .hero::before {
+    animation: none !important;
+  }
+
+  /* Небольшое размытие оставляем только в шапке и нижнем меню */
+  .topbar,
+  .vortex-mobile-nav {
+    -webkit-backdrop-filter: blur(8px) saturate(120%) !important;
+    backdrop-filter: blur(8px) saturate(120%) !important;
+  }
+
+  /* Сильный blur на больших панелях может замедлять телефон */
+  .hero,
+  .card,
+  .vx-profile-page,
+  .vx-subscriptions-page,
+  #vx-dialog,
+  .settings-dialog,
+  dialog {
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+  }
+
+  .hero,
+  .card,
+  .vx-profile-page,
+  .vx-subscriptions-page {
+    box-shadow: 0 8px 22px rgba(0, 0, 0, .18) !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: .01ms !important;
+    transition-duration: .01ms !important;
+  }
+}
+
+body.vx-reduce-motion *,
+body.vx-reduce-motion *::before,
+body.vx-reduce-motion *::after {
+  animation-duration: .01ms !important;
+  transition-duration: .01ms !important;
+}
