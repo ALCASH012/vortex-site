@@ -263,7 +263,7 @@
       status.textContent = "Изменения аватара отменены.";
     });
 
-  // Сохраняем фото, если пользователь сразу нажал «Добавить вакансию».
+  // Сохраняем фото, если пользователь сразу нажал «Добавить объявление».
   document.getElementById("vx-profile-add")
     ?.addEventListener("click", persistAvatar);
 
