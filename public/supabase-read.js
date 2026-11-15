@@ -24,11 +24,12 @@
   }
 
   const client = sdk.createClient(config.url, config.anonKey);
+  window.VORTEX_SUPABASE = client;
 
   async function loadListings() {
     const { data, error } = await client
       .from("listings")
-      .select("id,category,location,title,description,price,created_at,expires_at")
+      .select("id,owner_id,category,location,title,description,price,created_at,expires_at")
       .eq("status", "published")
       .gt("expires_at", new Date().toISOString())
       .order("created_at", { ascending: false })
@@ -38,6 +39,7 @@
 
     const listings = (Array.isArray(data) ? data : []).map(item => ({
       id: item.id,
+      ownerId: item.owner_id,
       category: item.category,
       location: item.location,
       title: item.title,
@@ -57,6 +59,8 @@
       ? `С сервера загружено общих объявлений: ${listings.length}.`
       : "Соединение с Supabase работает. Общих объявлений пока нет.";
   }
+
+  window.VORTEX_RELOAD_LISTINGS = loadListings;
 
   loadListings().catch(error => {
     console.error("Ошибка загрузки объявлений из Supabase:", error);
