@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>ВОРТЕКС — работа, жильё, питомцы</title>
+  <title>Рядом — работа, жильё, питомцы</title>
   <style>
     :root {
       --ink: #18231f;
@@ -281,225 +281,12 @@
       .filters .field:first-child, .full { grid-column: auto; }
     }
   </style>
-
-<style id="vortex-design">
-:root {
-  --ink: #f3f0e9;
-  --muted: #a3a8ad;
-  --line: #353b41;
-  --green: #f0e3c9;
-  --light: #20252a;
-  --white: #1c2126;
-}
-
-body {
-  color: var(--ink);
-  background: radial-gradient(ellipse at top, #20252a 0, #101316 55%);
-}
-
-.topbar {
-  background: rgba(16, 19, 22, .92);
-  border-bottom: 1px solid rgba(255,255,255,.08);
-  backdrop-filter: blur(16px);
-}
-
-.brand { color: #f5f1e9; font-weight: 850; letter-spacing: .05em; }
-.logo { color: #17191b; background: var(--green); border-radius: 13px; }
-.nav-caption { color: var(--muted); }
-
-.button { border-radius: 13px; }
-.button.dark {
-  color: #17191b;
-  background: var(--green);
-  box-shadow: 0 6px 22px rgba(240,227,201,.16);
-}
-.button.light { color: var(--ink); background: #30363c; }
-
-.hero {
-  color: var(--ink);
-  background: linear-gradient(135deg, #22282e, #191e23);
-  border: 1px solid rgba(255,255,255,.08);
-  box-shadow: 0 18px 50px rgba(0,0,0,.18);
-}
-.eyebrow { color: var(--green); }
-h1 span { color: var(--green); }
-.hero-copy, .result-count, .footer { color: var(--muted); }
-
-.field { color: #e4e1da; }
-input, select, textarea {
-  color: var(--ink);
-  background: #252b30;
-  border-color: #3c4349;
-  border-radius: 13px;
-}
-input::placeholder, textarea::placeholder { color: #969ca2; }
-input:focus, select:focus, textarea:focus {
-  outline: 2px solid #d7c7a7;
-  border-color: var(--green);
-}
-
-.section-head h2 { color: var(--ink); }
-.cards { gap: 14px; }
-.card {
-  position: relative;
-  min-height: 290px;
-  padding: 0;
-  overflow: hidden;
-  color: var(--ink);
-  background: #20252a;
-  border: 1px solid rgba(255,255,255,.09);
-  border-radius: 20px;
-  box-shadow: 0 12px 30px rgba(0,0,0,.18);
-}
-
-.card::before {
-  content: "";
-  display: block;
-  flex: 0 0 128px;
-  height: 128px;
-  background:
-    linear-gradient(135deg, #5b6060, #272c31);
-  background-size: cover;
-  background-position: center;
-}
-
-.card:has(.tag-jobs)::before {
-  background-image:
-    linear-gradient(0deg, rgba(15,18,21,.25), rgba(15,18,21,.05)),
-    url("https://images.unsplash.com/photo-1521737711867-e3b97375f902?auto=format&fit=crop&w=480&q=55");
-}
-.card:has(.tag-housing)::before {
-  background-image:
-    linear-gradient(0deg, rgba(15,18,21,.25), rgba(15,18,21,.05)),
-    url("https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=480&q=55");
-}
-.card:has(.tag-pets)::before {
-  background-image:
-    linear-gradient(0deg, rgba(15,18,21,.25), rgba(15,18,21,.05)),
-    url("https://images.unsplash.com/photo-1552053831-71594a27632d?auto=format&fit=crop&w=480&q=55");
-}
-
-.card-top {
-  position: relative;
-  height: 128px;
-  margin: -128px 14px 0;
-  padding-top: 13px;
-  align-items: flex-start;
-}
-.card-top .location {
-  color: white;
-  font-weight: 650;
-  text-shadow: 0 1px 5px #000;
-}
-.tag { border-radius: 99px; }
-.tag-jobs { color: #e1eaff; background: #334467; }
-.tag-housing { color: #ffe8b7; background: #574725; }
-.tag-pets { color: #ffd8f5; background: #583952; }
-
-.card h3 { margin: 16px 16px 7px; color: var(--ink); }
-.card .description {
-  margin: 0 16px 14px;
-  color: #b5bac0;
-}
-.card-bottom {
-  margin: auto 16px 0;
-  padding: 12px 0 16px;
-  border-top: 1px solid rgba(255,255,255,.09);
-}
-.card .price { color: var(--green); }
-.contact-link { color: var(--green); }
-.empty {
-  color: var(--muted);
-  background: #1c2126;
-  border-color: #454c53;
-}
-
-dialog {
-  color: var(--ink);
-  background: #1c2126;
-  border: 1px solid #3a4147;
-  border-radius: 20px;
-}
-dialog::backdrop { background: rgba(0,0,0,.72); }
-dialog form { color: var(--ink); }
-.dialog-head h2 { color: var(--ink); }
-.close-button { color: var(--ink); background: #30363c; }
-.hint { color: var(--muted); }
-
-.vortex-mobile-nav { display: none; }
-
-@media (max-width: 760px) {
-  .nav-caption { display: none; }
-  .nav .button { padding: 10px 12px; font-size: 14px; }
-  .hero { padding: 22px; }
-  h1 { font-size: 35px; }
-  .filters { grid-template-columns: 1fr; }
-  .filters .field:first-child { grid-column: auto; }
-
-  .cards {
-    display: flex;
-    overflow-x: auto;
-    padding-bottom: 8px;
-    scroll-snap-type: x mandatory;
-    scrollbar-width: none;
-  }
-  .cards::-webkit-scrollbar { display: none; }
-  .card {
-    flex: 0 0 82vw;
-    max-width: 310px;
-    scroll-snap-align: start;
-  }
-
-  body { padding-bottom: 100px; }
-  .vortex-mobile-nav {
-    position: fixed;
-    z-index: 50;
-    left: 50%;
-    bottom: calc(10px + env(safe-area-inset-bottom));
-    transform: translateX(-50%);
-    display: flex;
-    width: min(calc(100% - 28px), 430px);
-    justify-content: space-around;
-    padding: 8px;
-    border: 1px solid rgba(255,255,255,.1);
-    border-radius: 20px;
-    background: rgba(29,33,38,.94);
-    box-shadow: 0 12px 35px rgba(0,0,0,.4);
-    backdrop-filter: blur(15px);
-  }
-  .vortex-mobile-nav button {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 3px;
-    padding: 5px 2px;
-    border: 0;
-    color: #a3a8ad;
-    background: transparent;
-    font: inherit;
-    cursor: pointer;
-  }
-  .vortex-mobile-nav button span { font-size: 21px; line-height: 1.1; }
-  .vortex-mobile-nav button small { font-size: 10px; }
-  .vortex-mobile-nav button.active { color: var(--green); }
-}
-</style>
-
-<style>.vortex-mark{width:52px;height:52px;flex:0 0 52px;background-color:#050607;background-image:url("./vortex-logo.jpg");background-repeat:no-repeat;background-size:120px 120px;background-position:center -12px;border-radius:13px}</style>  <link rel="stylesheet" href="./settings.css">
-  <link rel="stylesheet" href="./animations.css?v=2">
-  <link rel="stylesheet" href="./liquid-glass.css?v=2">
-  <link rel="stylesheet" href="./performance.css?v=2">
-  <link rel="stylesheet" href="./sections.css?v=2">
-  <link rel="stylesheet" href="./category-layout.css?v=2">
-  <link rel="stylesheet" href="./listing-image.css?v=3">
-  <link rel="stylesheet" href="./sales.css?v=2">
 </head>
 <body>
   <header class="topbar">
     <div class="container nav">
-      <a class="brand" href="./">
-        <span class="logo vortex-mark" aria-hidden="true"></span><span>ВОРТЕКС</span>
+      <a class="brand" href="/">
+        <span class="logo">Р</span><span>Рядом</span>
       </a>
       <span class="nav-caption">Работа · жильё · питомцы</span>
       <button class="button dark" id="openDialog" type="button">+ Разместить</button>
@@ -510,7 +297,7 @@ dialog form { color: var(--ink); }
     <section class="hero">
       <div class="eyebrow">Объявления в одном месте</div>
       <h1>Работа, жильё,<br><span>питомцы — рядом.</span></h1>
-      <p class="hero-copy">Ищите объявления, квартиры и объявления о поиске или пристройстве питомцев.</p>
+      <p class="hero-copy">Ищите вакансии, квартиры и объявления о поиске или пристройстве питомцев.</p>
 
       <div class="filters">
         <label class="field">
@@ -528,8 +315,7 @@ dialog form { color: var(--ink); }
             <option value="jobs">Работа</option>
             <option value="housing">Жильё</option>
             <option value="pets">Питомцы</option>
-            <option value="sales">Продажи</option>
-</select>
+          </select>
         </label>
       </div>
     </section>
@@ -567,8 +353,7 @@ dialog form { color: var(--ink); }
             <option value="jobs">Работа</option>
             <option value="housing">Жильё</option>
             <option value="pets">Питомцы</option>
-            <option value="sales">Продажи</option>
-</select>
+          </select>
         </label>
 
         <label class="field">
@@ -597,22 +382,7 @@ dialog form { color: var(--ink); }
         </label>
       </div>
 
-      
-      <div class="vx-image-area">
-        <label class="vx-image-field">
-          <span>Фото объявления — необязательно</span>
-          <input id="listingImageFile" type="file" accept="image/*">
-        </label>
-        <div id="listingImagePreview" class="vx-image-preview" hidden>
-          <img id="listingImagePreviewImg" alt="Предпросмотр фото">
-          <div class="vx-image-preview-info">
-            <span id="listingImageStatus" role="status"></span>
-            <button id="removeListingImage" type="button">Убрать фото</button>
-          </div>
-        </div>
-      </div>
-      <input id="listingImageData" name="image" type="hidden" value="">
-<p class="hint">Это демонстрация: объявление будет видно только в вашем браузере.</p>
+      <p class="hint">Это демонстрация: объявление будет видно только в вашем браузере.</p>
       <div class="dialog-actions">
         <button class="button light" id="cancelDialog" type="button">Отмена</button>
         <button class="button dark" type="submit">Добавить</button>
@@ -675,8 +445,8 @@ dialog form { color: var(--ink); }
     const categoryLabels = {
       jobs: "Работа",
       housing: "Жильё",
-      pets: "Питомцы",
-      sales: "Продажи"};
+      pets: "Питомцы"
+    };
     const storageKey = "ryadom-demo-listings-v1";
 
     function readListings() {
@@ -692,32 +462,6 @@ dialog form { color: var(--ink); }
     }
 
     let listings = readListings();
-
-    let remoteListings = [];
-
-    function listingFeedKey(item) {
-      return JSON.stringify([
-        String(item?.category || "").trim().toLocaleLowerCase("ru"),
-        String(item?.title || "").trim().toLocaleLowerCase("ru"),
-        String(item?.location || "").trim().toLocaleLowerCase("ru"),
-        String(item?.contact || "").trim().toLocaleLowerCase("ru")
-      ]);
-    }
-
-    window.addEventListener("vortex:supabase-listings", event => {
-      const received = Array.isArray(event.detail?.listings)
-        ? event.detail.listings
-        : [];
-      const localListings = readListings();
-      const localKeys = new Set(localListings.map(listingFeedKey));
-
-      remoteListings = received.filter(
-        item => !localKeys.has(listingFeedKey(item))
-      );
-      listings = [...localListings, ...remoteListings];
-      render();
-    });
-
 
     function escapeHTML(value) {
       const replacements = {
@@ -746,18 +490,12 @@ dialog form { color: var(--ink); }
     }
 
     function renderCard(item) {
-      const category = ["jobs", "housing", "pets", "sales"].includes(item.category)
+      const category = ["jobs", "housing", "pets"].includes(item.category)
         ? item.category
         : "other";
       const label = categoryLabels[category] || "Объявление";
-      const href = contactHref(item.contact);
-      const contact = href
-        ? `<a class="contact-link" href="${escapeHTML(href)}">Связаться →</a>`
-        : `<span class="muted">${escapeHTML(item.contact || "Контакт не указан")}</span>`;
-
       return `
-        <article class="card${item.image ? " has-custom-image" : ""}"${item.id ? ` data-vx-listing-id="${escapeHTML(item.id)}" data-vx-owner-id="${escapeHTML(item.ownerId || "")}"` : ""}>
-          ${item.image ? '<img class="card-image" src="' + escapeHTML(item.image) + '" alt="" loading="lazy" decoding="async">' : ""}
+        <article class="card">
           <div class="card-top">
             <span class="tag tag-${category}">${escapeHTML(label)}</span>
             <span class="location">${escapeHTML(item.location || "")}</span>
@@ -766,7 +504,6 @@ dialog form { color: var(--ink); }
           <p class="description">${escapeHTML(item.description || "")}</p>
           <div class="card-bottom">
             <span class="price">${escapeHTML(item.price || "")}</span>
-            ${contact}
           </div>
         </article>
       `;
@@ -809,39 +546,11 @@ dialog form { color: var(--ink); }
     document.getElementById("closeDialog").addEventListener("click", () => dialog.close());
     document.getElementById("cancelDialog").addEventListener("click", () => dialog.close());
 
-    function calculateListingExpiry(createdAt, planId) {
-      const monthsByPlan = { usual: 1, econom: 2, deluxe: 5, premium: 12 };
-      const months = monthsByPlan[planId] || 1;
-      const date = new Date(createdAt);
-      const originalDay = date.getDate();
-
-      date.setDate(1);
-      date.setMonth(date.getMonth() + months);
-
-      const lastDay = new Date(
-        date.getFullYear(),
-        date.getMonth() + 1,
-        0
-      ).getDate();
-
-      date.setDate(Math.min(originalDay, lastDay));
-      return date.getTime();
-    }
-
     form.addEventListener("submit", event => {
       event.preventDefault();
 
       const data = new FormData(form);
       const get = name => String(data.get(name) || "").trim();
-
-      const createdAt = Date.now();
-      const planAtCreation = (() => {
-        try {
-          return localStorage.getItem("vortex-subscription-demo-v1") || "usual";
-        } catch {
-          return "usual";
-        }
-      })();
 
       const listing = {
         category: get("category"),
@@ -849,11 +558,7 @@ dialog form { color: var(--ink); }
         location: get("location"),
         description: get("description"),
         price: get("price"),
-        contact: get("contact"),
-        image: get("image"),
-        planAtCreation,
-        createdAt,
-        expiresAt: calculateListingExpiry(createdAt, planAtCreation)
+        contact: get("contact")
       };
 
       const updatedListings = [listing, ...listings];
@@ -878,80 +583,5 @@ dialog form { color: var(--ink); }
 
     render();
   </script>
-
-<nav id="vortex-mobile-nav" class="vortex-mobile-nav" aria-label="Навигация">
-  <button type="button" class="active" data-vortex-action="home"><span>⌂</span><small>Главная</small></button>
-  <button type="button" data-vortex-action="search"><span>⌕</span><small>Поиск</small></button>
-  <button type="button" data-vortex-action="pets"><span>♡</span><small>Питомцы</small></button>
-  <button type="button" data-vortex-action="add"><span>＋</span><small>Подать</small></button>
-</nav>
-<script id="vortex-mobile-nav-script">
-(() => {
-  const nav = document.getElementById("vortex-mobile-nav");
-  if (!nav) return;
-
-  nav.querySelectorAll("[data-vortex-action]").forEach(button => {
-    button.addEventListener("click", () => {
-      nav.querySelectorAll("button").forEach(item => {
-        item.classList.toggle("active", item === button);
-      });
-
-      const action = button.dataset.vortexAction;
-      const category = document.getElementById("categoryFilter");
-
-      if (action === "home") {
-        ["query", "city"].forEach(id => {
-          const field = document.getElementById(id);
-          if (field) {
-            field.value = "";
-            field.dispatchEvent(new Event("input"));
-          }
-        });
-        if (category) {
-          category.value = "all";
-          category.dispatchEvent(new Event("change"));
-        }
-        window.scrollTo({ top: 0, behavior: "smooth" });
-      }
-
-      if (action === "search") {
-        window.scrollTo({ top: 0, behavior: "smooth" });
-        document.getElementById("query")?.focus();
-      }
-
-      if (action === "pets" && category) {
-        category.value = "pets";
-        category.dispatchEvent(new Event("change"));
-        document.getElementById("cards")?.scrollIntoView({ behavior: "smooth" });
-      }
-
-      if (action === "add") {
-        document.getElementById("openDialog")?.click();
-      }
-    });
-  });
-})();
-</script>
-
-  <script src="./settings.js" defer></script>
-  <script src="./profile.js?v=3" defer></script>
-  <script src="./profile-edit.js?v=2" defer></script>
-  <script src="./aurora.js?v=3" defer></script>
-  <script src="./subscriptions.js?v=99" defer></script>
-  <script src="./pricing.js?v=99" defer></script>
-  <script src="./sections.js?v=3" defer></script>
-  <script src="./listing-image.js?v=3" defer></script>
-  <script src="./profile-avatar.js?v=2" defer></script>
-  <script src="./favorites.js?v=3" defer></script>
-  <script>try { localStorage.removeItem("vortex-privacy-v1"); } catch (_) {}</script>
-  <script src="./support.js?v=2" defer></script>
-  <script src="./premium-tools.js?v=1" defer></script>
-  <script src="./deluxe-tools.js?v=1" defer></script>
-  <script src="./economy-tools.js?v=1" defer></script>
-  <script src="./usual-tools.js?v=1" defer></script>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
-  <script src="./supabase-config.js?v=2" defer></script>
-  <script src="./supabase-read.js?v=2" defer></script>
-  <script src="./chat.js?v=2" defer></script>
 </body>
 </html>
