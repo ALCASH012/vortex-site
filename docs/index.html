@@ -783,11 +783,39 @@ dialog form { color: var(--ink); }
     document.getElementById("closeDialog").addEventListener("click", () => dialog.close());
     document.getElementById("cancelDialog").addEventListener("click", () => dialog.close());
 
+    function calculateListingExpiry(createdAt, planId) {
+      const monthsByPlan = { usual: 1, econom: 2, deluxe: 5, premium: 12 };
+      const months = monthsByPlan[planId] || 1;
+      const date = new Date(createdAt);
+      const originalDay = date.getDate();
+
+      date.setDate(1);
+      date.setMonth(date.getMonth() + months);
+
+      const lastDay = new Date(
+        date.getFullYear(),
+        date.getMonth() + 1,
+        0
+      ).getDate();
+
+      date.setDate(Math.min(originalDay, lastDay));
+      return date.getTime();
+    }
+
     form.addEventListener("submit", event => {
       event.preventDefault();
 
       const data = new FormData(form);
       const get = name => String(data.get(name) || "").trim();
+
+      const createdAt = Date.now();
+      const planAtCreation = (() => {
+        try {
+          return localStorage.getItem("vortex-subscription-demo-v1") || "usual";
+        } catch {
+          return "usual";
+        }
+      })();
 
       const listing = {
         category: get("category"),
@@ -796,7 +824,10 @@ dialog form { color: var(--ink); }
         description: get("description"),
         price: get("price"),
         contact: get("contact"),
-        image: get("image")
+        image: get("image"),
+        planAtCreation,
+        createdAt,
+        expiresAt: calculateListingExpiry(createdAt, planAtCreation)
       };
 
       const updatedListings = [listing, ...listings];
@@ -891,5 +922,6 @@ dialog form { color: var(--ink); }
   <script src="./premium-tools.js?v=1" defer></script>
   <script src="./deluxe-tools.js?v=1" defer></script>
   <script src="./economy-tools.js?v=1" defer></script>
+  <script src="./usual-tools.js?v=1" defer></script>
 </body>
 </html>
