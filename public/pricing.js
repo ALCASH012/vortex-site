@@ -49,7 +49,7 @@
   let selected = "";
   try {
     selected = localStorage.getItem("vortex-subscription-demo-v1") || "";
-    if (selected && selected !== "usual") {
+    if (selected && !["usual", "econom", "deluxe", "premium"].includes(selected)) {
       localStorage.removeItem("vortex-subscription-demo-v1");
       selected = "";
     }
