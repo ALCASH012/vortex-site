@@ -153,7 +153,7 @@
     </p>
     <div class="vx-profile-actions">
       <button id="vx-profile-save" type="button">Сохранить профиль</button>
-      <button id="vx-profile-add" type="button">＋ Добавить вакансию</button>
+      <button id="vx-profile-add" type="button">＋ Добавить объявление</button>
     </div>
     <p class="vx-profile-note">В форме можно выбрать и другой раздел: жильё или питомцы.</p>
     <button class="vx-profile-back" id="vx-profile-back" type="button">← На главную</button>
