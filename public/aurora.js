@@ -127,7 +127,7 @@
       '<small>Включить или выключить анимацию</small></span>' +
       '<input id="vx-aurora-enabled" type="checkbox">';
 
-    const colorRow = document.createElement("label");
+    const colorRow = document.createElement("div");
     colorRow.className = "vx-row";
     colorRow.innerHTML =
       '<span><strong>Цвет перелива</strong>' +
@@ -137,7 +137,12 @@
     const themeRow = dialog.querySelector("#vx-theme")?.closest(".vx-row");
     const actions = dialog.querySelector(".vx-actions");
 
-    if (themeRow) {
+    const appearancePanel = dialog.querySelector("#vx-glass-panel-appearance");
+    if (appearancePanel) {
+      enabledRow.className = "vx-glass-row";
+      colorRow.className = "vx-glass-row";
+      appearancePanel.append(enabledRow, colorRow);
+    } else if (themeRow) {
       themeRow.after(enabledRow, colorRow);
     } else if (actions) {
       actions.before(enabledRow, colorRow);
@@ -149,12 +154,40 @@
   const colorInput = dialog.querySelector("#vx-aurora-color");
   const enabledInput = dialog.querySelector("#vx-aurora-enabled");
   if (!colorInput || !enabledInput) return;
+  enabledInput.classList.add("vx-glass-switch");
+
+  const palette = document.createElement("div");
+  palette.setAttribute("role", "group");
+  palette.setAttribute("aria-label", "Цвет перелива");
+  palette.style.cssText = "display:flex;align-items:center;gap:7px;flex-wrap:wrap";
+  palette.innerHTML = ["#a78bfa", "#7c3aed", "#315efb", "#10b981", "#f59e0b", "#f97316", "#ef4444"].map(color => `<button type="button" data-vx-color="${color}" aria-label="Выбрать цвет ${color}" title="${color}" style="box-sizing:border-box;width:24px;height:24px;padding:0;border:2px solid transparent;border-radius:50%;background:${color};cursor:pointer"></button>`).join("");
+  palette.querySelectorAll("button").forEach(dot => dot.addEventListener("click", () => {
+    colorInput.value = dot.dataset.vxColor;
+    colorInput.dispatchEvent(new Event("input", { bubbles: true }));
+  }));
+  colorInput.style.cssText = "width:28px!important;height:28px;padding:1px;border-radius:50%;cursor:pointer";
+  colorInput.title = "Выбрать другой цвет";
+  const colorRow = colorInput.closest(".vx-glass-row, .vx-row");
+  palette.append(colorInput);
+  if (colorRow) {
+    colorRow.style.flexWrap = "wrap";
+    colorRow.append(palette);
+  }
+
+  function updatePalette() {
+    palette.querySelectorAll("button").forEach(dot => {
+      const selected = dot.dataset.vxColor === colorInput.value.toLowerCase();
+      dot.style.borderColor = selected ? "#18c997" : "transparent";
+      dot.setAttribute("aria-pressed", String(selected));
+    });
+  }
 
   function reloadSavedSettings() {
     saved = readSettings();
     colorInput.value = saved.color;
     enabledInput.checked = saved.enabled;
     applySettings(saved);
+    updatePalette();
   }
 
   function previewSettings() {
@@ -162,6 +195,7 @@
       color: colorInput.value,
       enabled: enabledInput.checked
     });
+    updatePalette();
   }
 
   colorInput.addEventListener("input", previewSettings);
