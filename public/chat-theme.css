@@ -1,0 +1,84 @@
+/* Тёмное оформление чата ВОРТЕКС */
+body .vx-chat-launch { color:#fff; border-color:#333; background:#171717; }
+
+#vx-chat-dialog .vx-chat-message {
+  max-width:82%; padding:11px 14px; color:#f3f3f3;
+  border:1px solid #2b2b2b; border-radius:18px 18px 18px 5px;
+  background:#242424; overflow-wrap:anywhere;
+}
+#vx-chat-dialog .vx-chat-message.mine {
+  color:#151515; border-color:#eee; border-radius:18px 18px 5px 18px;
+  background:#f1f1f1;
+}
+#vx-chat-dialog .vx-chat-message-author { display:none; }
+#vx-chat-dialog .vx-chat-message-time { color:#aaa; }
+#vx-chat-dialog .vx-chat-conversation {
+  color:#eee; border-color:#292929; background:#141414;
+}
+
+@media (max-width:620px) {
+  #vx-chat-dialog {
+    position:fixed; inset:0; margin:0; box-sizing:border-box;
+    width:100vw; max-width:none; height:100vh; height:100dvh;
+    max-height:none; padding:0; border:0; border-radius:0;
+    color:#f5f5f5; background:#050505;
+  }
+  #vx-chat-dialog::backdrop { background:#000; }
+  #vx-chat-dialog .vx-chat-shell {
+    box-sizing:border-box; height:100%; max-height:none; min-height:0;
+    padding:0; background:#050505;
+  }
+  #vx-chat-dialog .vx-chat-head {
+    flex:none; padding:calc(env(safe-area-inset-top, 0px) + 8px) 14px 8px;
+    border-bottom:1px solid #222;
+  }
+  #vx-chat-dialog .vx-chat-head h2 { margin:0; font-size:17px; }
+  #vx-chat-dialog .vx-chat-eyebrow { color:#bbb; }
+  #vx-chat-dialog .vx-chat-close {
+    width:42px; height:42px; border:1px solid #333; border-radius:50%;
+    color:#fff; background:#151515;
+  }
+  #vx-chat-dialog .vx-chat-status { flex:none; margin:0; padding:0 14px; }
+  #vx-chat-dialog .vx-chat-status:empty { display:none; }
+  #vx-chat-dialog .vx-chat-inbox:not([hidden]) {
+    display:flex; flex:1; min-height:0; flex-direction:column;
+  }
+  #vx-chat-dialog .vx-chat-account {
+    flex:none; margin:0; padding:6px 12px; border-bottom:1px solid #202020;
+  }
+  #vx-chat-dialog .vx-chat-list-panel {
+    flex:1; min-height:0; overflow:auto; padding:0 12px 12px;
+  }
+  #vx-chat-dialog .vx-chat-thread:not([hidden]) {
+    display:flex; flex:1; min-height:0; flex-direction:column; overflow:hidden;
+  }
+  #vx-chat-dialog #vx-chat-back {
+    align-self:flex-start; margin:7px 12px 0; border:0;
+    color:#aaa; background:transparent;
+  }
+  #vx-chat-dialog .vx-chat-thread h3 {
+    flex:none; margin:0; padding:4px 14px 12px;
+    border-bottom:1px solid #222; color:#fff; font-size:16px;
+  }
+  #vx-chat-dialog .vx-chat-messages {
+    flex:1; min-height:0; max-height:none; overflow:auto;
+    padding:16px 14px; border:0; border-radius:0; background:#050505;
+  }
+  #vx-chat-dialog .vx-chat-compose {
+    grid-template-columns:minmax(0, 1fr) 46px; align-items:end;
+    gap:8px; margin:0; padding:10px 12px
+      calc(env(safe-area-inset-bottom, 0px) + 10px);
+    border-top:1px solid #222; background:#080808;
+  }
+  #vx-chat-dialog .vx-chat-compose textarea {
+    min-height:46px; max-height:120px; resize:none; padding:12px;
+    border-radius:12px; color:#fff; background:#111; font-size:15px;
+  }
+  #vx-chat-dialog .vx-chat-send {
+    width:46px; height:46px; padding:0; justify-self:center;
+    border-radius:50%; color:#111; background:#f1f1f1; font-size:0;
+  }
+  #vx-chat-dialog .vx-chat-send::after {
+    content:"➤"; font-size:20px;
+  }
+}
