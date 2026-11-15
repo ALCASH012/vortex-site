@@ -493,6 +493,7 @@ dialog form { color: var(--ink); }
   <link rel="stylesheet" href="./sections.css?v=1">
   <link rel="stylesheet" href="./category-layout.css?v=1">
   <link rel="stylesheet" href="./listing-image.css?v=2">
+  <link rel="stylesheet" href="./sales.css?v=1">
 </head>
 <body>
   <header class="topbar">
@@ -527,7 +528,8 @@ dialog form { color: var(--ink); }
             <option value="jobs">Работа</option>
             <option value="housing">Жильё</option>
             <option value="pets">Питомцы</option>
-          </select>
+            <option value="sales">Продажи</option>
+</select>
         </label>
       </div>
     </section>
@@ -565,7 +567,8 @@ dialog form { color: var(--ink); }
             <option value="jobs">Работа</option>
             <option value="housing">Жильё</option>
             <option value="pets">Питомцы</option>
-          </select>
+            <option value="sales">Продажи</option>
+</select>
         </label>
 
         <label class="field">
@@ -672,8 +675,8 @@ dialog form { color: var(--ink); }
     const categoryLabels = {
       jobs: "Работа",
       housing: "Жильё",
-      pets: "Питомцы"
-    };
+      pets: "Питомцы",
+      sales: "Продажи"};
     const storageKey = "ryadom-demo-listings-v1";
 
     function readListings() {
@@ -717,7 +720,7 @@ dialog form { color: var(--ink); }
     }
 
     function renderCard(item) {
-      const category = ["jobs", "housing", "pets"].includes(item.category)
+      const category = ["jobs", "housing", "pets", "sales"].includes(item.category)
         ? item.category
         : "other";
       const label = categoryLabels[category] || "Объявление";
@@ -879,7 +882,7 @@ dialog form { color: var(--ink); }
   <script src="./aurora.js?v=2" defer></script>
   <script src="./subscriptions.js?v=1" defer></script>
   <script src="./pricing.js?v=3" defer></script>
-  <script src="./sections.js?v=1" defer></script>
+  <script src="./sections.js?v=2" defer></script>
   <script src="./listing-image.js?v=2" defer></script>
   <script src="./profile-avatar.js?v=1" defer></script>
   <script src="./favorites.js?v=2" defer></script>

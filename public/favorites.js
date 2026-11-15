@@ -79,7 +79,7 @@
 
   function extractCard(card) {
     const tag = card.querySelector(".tag");
-    const category = ["jobs", "housing", "pets"].find(name =>
+    const category = ["jobs", "housing", "pets", "sales"].find(name =>
       tag?.classList.contains("tag-" + name)
     ) || "other";
 
@@ -110,7 +110,7 @@
 
       return value.filter(item => item && typeof item === "object").map(item => {
         const clean = {
-          category: ["jobs", "housing", "pets", "other"].includes(item.category)
+          category: ["jobs", "housing", "pets", "sales", "other"].includes(item.category)
             ? item.category : "other",
           title: String(item.title || "Объявление"),
           location: String(item.location || ""),
@@ -334,7 +334,7 @@
   const choosePlanButton = document.getElementById("vx-favorites-choose-plan");
 
   function renderFavoriteCard(item) {
-    const category = ["jobs", "housing", "pets"].includes(item.category)
+    const category = ["jobs", "housing", "pets", "sales"].includes(item.category)
       ? item.category : "other";
     const image = safeImage(item.image);
     const contact = item.contactHref

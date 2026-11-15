@@ -10,7 +10,8 @@
   const options = [
     { id: "jobs", icon: "💼", title: "Работа", note: "Вакансии и подработка" },
     { id: "housing", icon: "⌂", title: "Жильё", note: "Квартиры и комнаты" },
-    { id: "pets", icon: "🐾", title: "Питомцы", note: "Найти или пристроить" }
+    { id: "pets", icon: "🐾", title: "Питомцы", note: "Найти или пристроить" },
+    { id: "sales", icon: "🛍️", title: "Продажи", note: "Товары и вещи" }
   ];
 
   const picker = document.createElement("section");

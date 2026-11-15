@@ -130,7 +130,7 @@
         || "{}";
       const value = { ...defaults, ...JSON.parse(raw) };
 
-      if (!["all", "jobs", "housing", "pets"].includes(value.category)) value.category = "all";
+      if (!["all", "jobs", "housing", "pets", "sales"].includes(value.category)) value.category = "all";
       if (!["dark", "light", "system"].includes(value.theme)) value.theme = "dark";
       if (!["grid", "list"].includes(value.layout)) value.layout = "grid";
       if (!["normal", "compact"].includes(value.density)) value.density = "normal";
@@ -174,7 +174,7 @@
             <option value="jobs">Работа</option>
             <option value="housing">Жильё</option>
             <option value="pets">Питомцы</option>
-          </select>
+          <option value="sales">Продажи</option></select>
         </label>
 
         <label class="vx-row"><span>Тема<small>Тёмная, светлая или как на устройстве</small></span>

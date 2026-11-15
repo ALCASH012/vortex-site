@@ -1,0 +1,9 @@
+.tag-sales {
+  color: #c8f3df;
+  background: #285744;
+}
+
+body.light-theme .tag-sales {
+  color: #17623e;
+  background: #e0f5e9;
+}
