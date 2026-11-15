@@ -693,6 +693,32 @@ dialog form { color: var(--ink); }
 
     let listings = readListings();
 
+    let remoteListings = [];
+
+    function listingFeedKey(item) {
+      return JSON.stringify([
+        String(item?.category || "").trim().toLocaleLowerCase("ru"),
+        String(item?.title || "").trim().toLocaleLowerCase("ru"),
+        String(item?.location || "").trim().toLocaleLowerCase("ru"),
+        String(item?.contact || "").trim().toLocaleLowerCase("ru")
+      ]);
+    }
+
+    window.addEventListener("vortex:supabase-listings", event => {
+      const received = Array.isArray(event.detail?.listings)
+        ? event.detail.listings
+        : [];
+      const localListings = readListings();
+      const localKeys = new Set(localListings.map(listingFeedKey));
+
+      remoteListings = received.filter(
+        item => !localKeys.has(listingFeedKey(item))
+      );
+      listings = [...localListings, ...remoteListings];
+      render();
+    });
+
+
     function escapeHTML(value) {
       const replacements = {
         "&": "&amp;",
@@ -730,7 +756,7 @@ dialog form { color: var(--ink); }
         : `<span class="muted">${escapeHTML(item.contact || "Контакт не указан")}</span>`;
 
       return `
-        <article class="card${item.image ? " has-custom-image" : ""}">
+        <article class="card${item.image ? " has-custom-image" : ""}"${item.id ? ` data-vx-listing-id="${escapeHTML(item.id)}"` : ""}>
           ${item.image ? '<img class="card-image" src="' + escapeHTML(item.image) + '" alt="" loading="lazy" decoding="async">' : ""}
           <div class="card-top">
             <span class="tag tag-${category}">${escapeHTML(label)}</span>
@@ -923,5 +949,8 @@ dialog form { color: var(--ink); }
   <script src="./deluxe-tools.js?v=1" defer></script>
   <script src="./economy-tools.js?v=1" defer></script>
   <script src="./usual-tools.js?v=1" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
+  <script src="./supabase-config.js?v=1" defer></script>
+  <script src="./supabase-read.js?v=1" defer></script>
 </body>
 </html>
