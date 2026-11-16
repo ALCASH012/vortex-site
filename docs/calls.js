@@ -4,8 +4,9 @@
   const client = window.VORTEX_SUPABASE;
   const dialog = document.getElementById("vx-chat-dialog");
   const title = document.getElementById("vx-chat-thread-title");
+  const callMount = document.getElementById("vx-chat-call-mount");
 
-  if (!client || !dialog || !title) {
+  if (!client || !dialog || !title || !callMount) {
     console.error("Звонки ВОРТЕКС: чат или Supabase не найдены.");
     return;
   }
@@ -24,16 +25,19 @@
   const style = document.createElement("style");
   style.textContent = `
     #vx-chat-dialog .vx-call-bar {
-      padding:8px 12px; border-bottom:1px solid #ffffff18;
+      display:flex; align-items:center; justify-content:space-between; gap:14px;
+      padding:6px 14px; border-bottom:1px solid #ffffff18;
       background:#090909;
     }
     #vx-chat-dialog .vx-call-status {
-      min-height:18px; margin:0 0 7px; color:#aaa;
+      flex:1; min-width:0; min-height:18px; margin:0; color:#aaa;
       font-size:12px; line-height:1.4;
     }
-    #vx-chat-dialog .vx-call-actions { display:flex; gap:7px; flex-wrap:wrap; }
+    #vx-chat-dialog .vx-call-actions {
+      display:flex; flex:none; gap:7px; flex-wrap:wrap;
+    }
     #vx-chat-dialog .vx-call-actions button {
-      min-height:36px; padding:7px 12px; border:1px solid #383838;
+      min-height:32px; padding:6px 12px; border:1px solid #383838;
       border-radius:999px; color:#fff; background:#1b1b1b;
       font:inherit; font-size:12px; cursor:pointer;
     }
@@ -58,7 +62,7 @@
       <button type="button" class="vx-call-end" hidden>Завершить</button>
     </div>
   `;
-  title.after(bar);
+  callMount.append(bar);
 
   const status = bar.querySelector(".vx-call-status");
   const startButton = bar.querySelector(".vx-call-start");

@@ -82,3 +82,213 @@ body .vx-chat-launch { color:#fff; border-color:#333; background:#171717; }
     content:"➤"; font-size:20px;
   }
 }
+
+/* ВОРТЕКС: оформление переписки в стиле референса */
+#vx-chat-dialog.vx-chat-thread-open .vx-chat-head,
+#vx-chat-dialog.vx-chat-thread-open .vx-chat-status,
+#vx-chat-dialog.vx-chat-thread-open .vx-chat-account,
+#vx-chat-dialog.vx-chat-thread-open .vx-chat-list-panel {
+  display: none !important;
+}
+#vx-chat-dialog.vx-chat-thread-open .vx-chat-inbox:not([hidden]) {
+  display: flex; flex: 1; min-height: 0; flex-direction: column;
+}
+#vx-chat-dialog.vx-chat-thread-open .vx-chat-thread:not([hidden]) {
+  display: flex; flex: 1; min-height: 0; flex-direction: column;
+  overflow: hidden; background: #080808;
+}
+#vx-chat-dialog .vx-chat-thread-head {
+  display: flex; flex: none; align-items: center; gap: 12px;
+  min-height: 76px; padding: 9px 14px;
+  border-bottom: 1px solid #202020; background: #090909;
+}
+#vx-chat-dialog .vx-chat-back-icon,
+#vx-chat-dialog .vx-chat-thread-close {
+  display: grid; flex: none; place-items: center;
+  width: 40px; height: 44px; padding: 0; border: 0;
+  color: #efd1a5; background: transparent; font: inherit;
+  font-size: 34px; cursor: pointer;
+}
+#vx-chat-dialog .vx-chat-thread-close {
+  width: 36px; margin-left: auto; color: #c8b99f; font-size: 27px;
+}
+#vx-chat-dialog .vx-chat-peer-avatar {
+  display: grid; flex: none; place-items: center;
+  width: 50px; height: 50px; border: 1px solid #484039;
+  border-radius: 50%; color: #f0d2a8; background: #24211e;
+  font-size: 20px; font-weight: 800;
+}
+#vx-chat-dialog .vx-chat-peer-info {
+  display: flex; min-width: 0; flex-direction: column; gap: 3px;
+  color: #f5f2ed;
+}
+#vx-chat-dialog .vx-chat-peer-info strong {
+  overflow: hidden; font-size: 17px; text-overflow: ellipsis; white-space: nowrap;
+}
+#vx-chat-dialog .vx-chat-peer-info span {
+  color: #999; font-size: 12px;
+}
+#vx-chat-dialog .vx-chat-listing-card {
+  display: flex; flex: none; align-items: center; gap: 12px;
+  min-height: 88px; margin: 12px 14px; padding: 9px 12px;
+  border: 1px solid #242424; border-radius: 20px;
+  color: #f4f0e9; background: #171819;
+}
+#vx-chat-dialog .vx-chat-listing-placeholder {
+  display: grid; flex: none; place-items: center;
+  width: 76px; height: 68px; border-radius: 13px;
+  color: #d9bc94; background: linear-gradient(135deg,#37312a,#201e1c);
+  font-size: 30px;
+}
+#vx-chat-dialog .vx-chat-listing-placeholder[hidden],
+#vx-chat-dialog .vx-chat-listing-image[hidden] { display: none; }
+#vx-chat-dialog .vx-chat-listing-image {
+  display: block; flex: none; width: 76px; height: 68px;
+  border-radius: 13px; object-fit: cover; background: #201e1c;
+}
+#vx-chat-dialog .vx-chat-listing-info { min-width: 0; flex: 1; }
+#vx-chat-dialog .vx-chat-listing-info > span {
+  color: #aaa; font-size: 11px;
+}
+#vx-chat-dialog .vx-chat-listing-info h3 {
+  overflow: hidden; margin: 3px 0; color: #f5f2ed;
+  font-size: 15px; text-overflow: ellipsis;
+}
+#vx-chat-dialog #vx-chat-listing-price {
+  color: #efd1a5; font-size: 15px;
+}
+#vx-chat-dialog .vx-chat-listing-arrow {
+  flex: none; color: #d3c2aa; font-size: 30px;
+}
+#vx-chat-dialog .vx-chat-messages {
+  display: flex; flex: 1; min-height: 0; flex-direction: column; gap: 10px;
+  overflow: auto; padding: 14px 16px 20px; border: 0; border-radius: 0;
+  background: #080808; scroll-behavior: smooth;
+}
+#vx-chat-dialog .vx-chat-date-separator {
+  align-self: center; margin: 4px 0 8px; padding: 7px 16px;
+  border-radius: 999px; color: #b7b7b7; background: #1e1f20;
+  font-size: 12px;
+}
+#vx-chat-dialog .vx-chat-message {
+  position: relative; flex: 0 0 auto; align-self: flex-start;
+  width: fit-content; max-width: min(86%, 560px); margin: 0 8px 5px 0;
+  padding: 10px 14px 8px; border: 0; border-radius: 19px 19px 19px 5px;
+  color: #f1f1f1; background: #252628; box-shadow: 0 2px 7px #0005;
+}
+#vx-chat-dialog .vx-chat-message.mine {
+  align-self: flex-end; margin: 0 8px 5px 0;
+  border-radius: 19px 19px 5px 19px;
+  color: #201b15; background: #efd1a5;
+}
+#vx-chat-dialog .vx-chat-message::after {
+  position: absolute; bottom: 2px; left: -5px; width: 12px; height: 12px;
+  background: #252628; clip-path: polygon(100% 0,100% 100%,0 100%);
+  content: "";
+}
+#vx-chat-dialog .vx-chat-message.mine::after {
+  right: -5px; left: auto; background: #efd1a5;
+  clip-path: polygon(0 0,0 100%,100% 100%);
+}
+#vx-chat-dialog .vx-chat-message-author { display: none; }
+#vx-chat-dialog .vx-chat-message-body { font-size: 15px; line-height: 1.42; }
+#vx-chat-dialog .vx-chat-message-time {
+  display: block; margin-top: 4px; color: #aaa; font-size: 10px;
+}
+#vx-chat-dialog .vx-chat-message.mine .vx-chat-message-time { color: #786d5e; }
+#vx-chat-dialog #vx-chat-call-mount { flex: none; }
+
+/* ВОРТЕКС: геометрия переписки */
+#vx-chat-dialog.vx-chat-thread-open {
+  position: fixed; inset: 0; box-sizing: border-box;
+  width: min(960px, calc(100vw - 32px));
+  height: min(840px, calc(100dvh - 32px));
+  max-width: none; max-height: none; margin: auto; overflow: hidden;
+}
+#vx-chat-dialog.vx-chat-thread-open .vx-chat-shell {
+  width: 100%; height: 100%; min-height: 0; max-height: none;
+  box-sizing: border-box; padding: 0; overflow: hidden;
+}
+#vx-chat-dialog.vx-chat-thread-open .vx-chat-inbox:not([hidden]) {
+  width: 100%; min-width: 0; min-height: 0; overflow: hidden;
+}
+#vx-chat-dialog.vx-chat-thread-open .vx-chat-thread:not([hidden]) {
+  width: 100%; min-width: 0; min-height: 0;
+}
+#vx-chat-dialog.vx-chat-thread-open .vx-chat-messages {
+  flex: 1 1 0; min-height: 0; max-height: none; box-sizing: border-box;
+  overflow-x: hidden; overflow-y: auto; overscroll-behavior: contain;
+}
+#vx-chat-dialog.vx-chat-thread-open .vx-chat-compose {
+  display: flex; flex: none; align-items: flex-end; gap: 10px;
+  width: 100%; box-sizing: border-box; margin: 0;
+  padding: 12px 14px calc(12px + env(safe-area-inset-bottom, 0px));
+  border-top: 1px solid #202020; background: #090909;
+}
+#vx-chat-dialog.vx-chat-thread-open .vx-chat-compose textarea {
+  flex: 1; width: auto; min-width: 0; min-height: 48px; max-height: 120px;
+  box-sizing: border-box; padding: 12px 16px; resize: none;
+  border: 1px solid #383838; border-radius: 25px;
+  color: #f4f0e9; background: #222; font-size: 15px; line-height: 1.4;
+}
+#vx-chat-dialog.vx-chat-thread-open .vx-chat-send {
+  display: grid; flex: 0 0 48px; place-items: center;
+  width: 48px; height: 48px; min-width: 48px; min-height: 48px;
+  padding: 0; border-radius: 50%; font-size: 0;
+}
+#vx-chat-dialog.vx-chat-thread-open .vx-chat-send::before {
+  content: "➤"; font-size: 20px; line-height: 1;
+}
+@media (max-width: 520px) {
+  #vx-chat-dialog.vx-chat-thread-open {
+    width: 100vw; height: 100dvh; margin: 0;
+    border: 0; border-radius: 0;
+  }
+}
+
+/* ВОРТЕКС: тёмная прокрутка переписки */
+html:has(#vx-chat-dialog[open]),
+body:has(#vx-chat-dialog[open]) {
+  overflow: hidden !important;
+}
+#vx-chat-dialog.vx-chat-thread-open .vx-chat-messages {
+  scrollbar-color: #504b45 #101010;
+  scrollbar-width: thin;
+}
+#vx-chat-dialog.vx-chat-thread-open .vx-chat-messages::-webkit-scrollbar {
+  width: 8px;
+}
+#vx-chat-dialog.vx-chat-thread-open .vx-chat-messages::-webkit-scrollbar-track {
+  background: #101010;
+}
+#vx-chat-dialog.vx-chat-thread-open .vx-chat-messages::-webkit-scrollbar-thumb {
+  border: 2px solid #101010; border-radius: 999px; background: #504b45;
+}
+#vx-chat-dialog.vx-chat-thread-open .vx-chat-messages::-webkit-scrollbar-button {
+  display: none; width: 0; height: 0;
+}
+
+/* ВОРТЕКС: аватары участников переписки */
+#vx-chat-dialog .vx-chat-peer-avatar {
+  position: relative; overflow: hidden;
+}
+#vx-chat-dialog .vx-chat-peer-avatar img {
+  position: absolute; inset: 0; display: block;
+  width: 100%; height: 100%; border-radius: inherit; object-fit: cover;
+}
+#vx-chat-dialog .vx-chat-message.peer-message {
+  margin-left: 36px;
+}
+#vx-chat-dialog .vx-chat-message-avatar {
+  position: absolute; z-index: 1; left: -34px; bottom: 0;
+  display: grid; place-items: center; box-sizing: border-box;
+  width: 26px; height: 26px; overflow: hidden;
+  border: 1px solid #484039; border-radius: 50%;
+  color: #f0d2a8; background: #24211e;
+  font-size: 11px; font-weight: 800;
+}
+#vx-chat-dialog .vx-chat-peer-avatar img[hidden] { display: none !important; }
+#vx-chat-dialog .vx-chat-message-avatar img {
+  position: absolute; inset: 0; display: block;
+  width: 100%; height: 100%; border-radius: inherit; object-fit: cover;
+}

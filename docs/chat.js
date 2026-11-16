@@ -201,12 +201,37 @@
           <div id="vx-chat-list"></div>
         </section>
         <section id="vx-chat-thread" class="vx-chat-thread" hidden>
-          <button type="button" class="vx-chat-secondary" id="vx-chat-back">← Все переписки</button>
-          <h3 id="vx-chat-thread-title"></h3>
+          <header class="vx-chat-thread-head">
+            <button type="button" class="vx-chat-back-icon" id="vx-chat-back"
+              aria-label="Все переписки" title="Все переписки">‹</button>
+            <div class="vx-chat-peer-avatar" id="vx-chat-peer-avatar" aria-hidden="true">
+              <span id="vx-chat-peer-initial">В</span>
+              <img id="vx-chat-peer-image" alt="" hidden>
+            </div>
+            <div class="vx-chat-peer-info">
+              <strong id="vx-chat-peer-name">Собеседник</strong>
+              <span>Переписка в ВОРТЕКС</span>
+            </div>
+            <button type="button" class="vx-chat-thread-close" data-chat-close
+              aria-label="Закрыть переписку">×</button>
+          </header>
+          <section class="vx-chat-listing-card" aria-label="Объявление">
+            <div id="vx-chat-listing-placeholder" class="vx-chat-listing-placeholder" aria-hidden="true">◇</div>
+            <img id="vx-chat-listing-image" class="vx-chat-listing-image" alt="" hidden>
+            <div class="vx-chat-listing-info">
+              <span>Объявление</span>
+              <h3 id="vx-chat-thread-title"></h3>
+              <strong id="vx-chat-listing-price" hidden></strong>
+            </div>
+            <span class="vx-chat-listing-arrow" aria-hidden="true">›</span>
+          </section>
+          <div id="vx-chat-call-mount" class="vx-chat-call-mount"></div>
           <div id="vx-chat-messages" class="vx-chat-messages" aria-live="polite"></div>
           <form id="vx-chat-send-form" class="vx-chat-compose">
             <textarea id="vx-chat-message-input" maxlength="4000" required
-              placeholder="Напишите сообщение…" aria-label="Текст сообщения"></textarea>
+              placeholder="Напишите сообщение…"
+              title="Enter — отправить, Shift+Enter — новая строка"
+              aria-label="Текст сообщения"></textarea>
             <button type="submit" class="vx-chat-send">Отправить</button>
           </form>
         </section>
@@ -223,15 +248,117 @@
   const inboxList = document.getElementById("vx-chat-list");
   const messagesBox = document.getElementById("vx-chat-messages");
   const messageInput = document.getElementById("vx-chat-message-input");
+  const peerNameElement = document.getElementById("vx-chat-peer-name");
+  const peerAvatarInitial = document.getElementById("vx-chat-peer-initial");
+  const peerAvatarImage = document.getElementById("vx-chat-peer-image");
+  let peerProfile = { displayName: "", avatarUrl: "" };
+  let peerProfileRequest = 0;
+  let peerAvatarRenderRequest = 0;
 
   function setStatus(message) {
     statusBox.textContent = message || "";
+  }
+
+  function renderPeerProfile() {
+    const displayName = peerProfile.displayName || "Собеседник";
+    const initial = peerProfile.displayName
+      ? Array.from(peerProfile.displayName)[0]?.toLocaleUpperCase("ru")
+      : "В";
+
+    peerNameElement.textContent = displayName;
+    peerAvatarInitial.textContent = initial || "В";
+
+    const renderRequest = ++peerAvatarRenderRequest;
+    peerAvatarImage.onload = null;
+    peerAvatarImage.onerror = null;
+
+    if (!peerProfile.avatarUrl) {
+      peerAvatarImage.hidden = true;
+      peerAvatarImage.removeAttribute("src");
+      peerAvatarInitial.hidden = false;
+      return;
+    }
+
+    peerAvatarInitial.hidden = true;
+    peerAvatarImage.hidden = false;
+    peerAvatarImage.onerror = () => {
+      if (renderRequest !== peerAvatarRenderRequest) return;
+      peerAvatarImage.hidden = true;
+      peerAvatarImage.removeAttribute("src");
+      peerAvatarInitial.hidden = false;
+    };
+    peerAvatarImage.src = peerProfile.avatarUrl;
+  }
+
+  async function loadPeerProfile(conversationId, currentUserId, peerId, requestId) {
+    if (!UUID_RE.test(peerId || "")) return;
+
+    try {
+      const { data, error } = await client
+        .from("profiles")
+        .select("id,display_name,avatar_path")
+        .eq("id", peerId)
+        .maybeSingle();
+
+      if (error) throw error;
+      if (requestId !== peerProfileRequest ||
+          activeConversation?.id !== conversationId ||
+          currentSession?.user?.id !== currentUserId) return;
+
+      const displayName = typeof data?.display_name === "string"
+        ? data.display_name.trim().slice(0, 80)
+        : "";
+      const expectedPath = `${peerId}/avatar.jpg`;
+      let avatarUrl = "";
+
+      if (data?.avatar_path === expectedPath) {
+        try {
+          const { data: imageData, error: imageError } = await client
+            .storage
+            .from("profile-avatars")
+            .createSignedUrl(expectedPath, 3600);
+
+          if (imageError) {
+            console.warn("ВОРТЕКС: не удалось получить аватар собеседника.", imageError);
+          } else {
+            avatarUrl = imageData?.signedUrl || "";
+          }
+        } catch (imageError) {
+          console.warn("ВОРТЕКС: не удалось получить аватар собеседника.", imageError);
+        }
+      }
+
+      if (requestId !== peerProfileRequest ||
+          activeConversation?.id !== conversationId ||
+          currentSession?.user?.id !== currentUserId) return;
+
+      peerProfile = { displayName, avatarUrl };
+      renderPeerProfile();
+      void loadMessages();
+    } catch (error) {
+      if (requestId === peerProfileRequest) {
+        console.warn("ВОРТЕКС: не удалось загрузить профиль собеседника.", error);
+      }
+    }
   }
 
   function showChat() {
     if (!chatDialog.open) chatDialog.showModal();
     if (currentSession) {
       loadInbox();
+
+      if (activeConversation && !threadPanel.hidden) {
+        const currentUserId = currentSession.user.id;
+        window.dispatchEvent(new CustomEvent("vortex:chat-thread-open", {
+          detail: {
+            conversationId: activeConversation.id,
+            currentUserId,
+            peerId: activeConversation.buyer_id === currentUserId
+              ? activeConversation.seller_id
+              : activeConversation.buyer_id
+          }
+        }));
+      }
     } else {
       setStatus("Войдите или создайте аккаунт, чтобы открыть чат.");
     }
@@ -308,6 +435,7 @@
       }
     } else {
       stopRealtime();
+      chatDialog.classList.remove("vx-chat-thread-open");
       activeConversation = null;
       threadPanel.hidden = true;
       inboxListPanel.hidden = false;
@@ -334,14 +462,23 @@
     conversationCache.clear();
 
     const listingIds = [...new Set(conversations.map(item => item.listing_id).filter(Boolean))];
-    const titles = new Map();
+    const listingDetails = new Map();
 
     if (listingIds.length) {
       const result = await client
         .from("listings")
-        .select("id,title")
+        .select("id,title,price,image_path")
         .in("id", listingIds);
-      (result.data || []).forEach(item => titles.set(item.id, item.title));
+      (result.data || []).forEach(item => {
+        const imageResult = item.image_path
+          ? client.storage.from("listing-images").getPublicUrl(item.image_path)
+          : null;
+        listingDetails.set(item.id, {
+          title: item.title || "",
+          price: item.price || "",
+          image: imageResult?.data?.publicUrl || ""
+        });
+      });
     }
 
     inboxList.replaceChildren();
@@ -356,8 +493,11 @@
     }
 
     conversations.forEach(conversation => {
-      const title = titles.get(conversation.listing_id) || "Объявление";
+      const details = listingDetails.get(conversation.listing_id) || {};
+      const title = details.title || "Объявление";
       conversation.listingTitle = title;
+      conversation.listingPrice = details.price || "";
+      conversation.listingImage = details.image || "";
       conversationCache.set(conversation.id, conversation);
 
       const button = document.createElement("button");
@@ -407,16 +547,50 @@
       messagesBox.append(empty);
     }
 
+    const now = new Date();
+    const makeDateKey = date => [
+      date.getFullYear(),
+      String(date.getMonth() + 1).padStart(2, "0"),
+      String(date.getDate()).padStart(2, "0")
+    ].join("-");
+    const todayKey = makeDateKey(now);
+    const yesterday = new Date(now);
+    yesterday.setDate(yesterday.getDate() - 1);
+    const yesterdayKey = makeDateKey(yesterday);
+    let previousDateKey = "";
+
     messages.forEach(message => {
+      const messageDate = message.created_at ? new Date(message.created_at) : null;
+      if (messageDate && Number.isFinite(messageDate.getTime())) {
+        const dateKey = makeDateKey(messageDate);
+        if (dateKey !== previousDateKey) {
+          const separator = document.createElement("div");
+          separator.className = "vx-chat-date-separator";
+          if (dateKey === todayKey) {
+            separator.textContent = "Сегодня";
+          } else if (dateKey === yesterdayKey) {
+            separator.textContent = "Вчера";
+          } else {
+            const options = { day: "numeric", month: "long" };
+            if (messageDate.getFullYear() !== now.getFullYear()) {
+              options.year = "numeric";
+            }
+            separator.textContent = messageDate.toLocaleDateString("ru-RU", options);
+          }
+          messagesBox.append(separator);
+          previousDateKey = dateKey;
+        }
+      }
+
+      const isMine = message.sender_id === currentSession.user.id;
       const item = document.createElement("article");
-      item.className = "vx-chat-message"
-        + (message.sender_id === currentSession.user.id ? " mine" : "");
+      item.className = "vx-chat-message" + (isMine ? " mine" : " peer-message");
 
       const author = document.createElement("strong");
       author.className = "vx-chat-message-author";
-      author.textContent = message.sender_id === currentSession.user.id
+      author.textContent = isMine
         ? "Вы"
-        : "Пользователь";
+        : (peerProfile.displayName || "Собеседник");
 
       const body = document.createElement("div");
       body.className = "vx-chat-message-body";
@@ -424,11 +598,34 @@
 
       const time = document.createElement("small");
       time.className = "vx-chat-message-time";
-      time.textContent = message.created_at
-        ? new Date(message.created_at).toLocaleTimeString("ru-RU", {
+      time.textContent = messageDate && Number.isFinite(messageDate.getTime())
+        ? messageDate.toLocaleTimeString("ru-RU", {
             hour: "2-digit", minute: "2-digit"
           })
         : "";
+
+      if (!isMine) {
+        const avatar = document.createElement("span");
+        avatar.className = "vx-chat-message-avatar";
+        avatar.setAttribute("aria-hidden", "true");
+
+        const initial = peerProfile.displayName
+          ? Array.from(peerProfile.displayName)[0]?.toLocaleUpperCase("ru") || "В"
+          : "В";
+        avatar.textContent = initial;
+
+        if (peerProfile.avatarUrl) {
+          const image = document.createElement("img");
+          image.alt = "";
+          image.addEventListener("error", () => {
+            avatar.textContent = initial;
+          }, { once: true });
+          avatar.append(image);
+          image.src = peerProfile.avatarUrl;
+        }
+
+        item.append(avatar);
+      }
 
       item.append(author, body, time);
       messagesBox.append(item);
@@ -441,18 +638,47 @@
     activeConversation = conversation;
     inboxListPanel.hidden = true;
     threadPanel.hidden = false;
+    chatDialog.classList.add("vx-chat-thread-open");
     document.getElementById("vx-chat-thread-title").textContent =
-      "Объявление: " + (conversation.listingTitle || "Объявление");
+      conversation.listingTitle || "Объявление";
+    const priceElement = document.getElementById("vx-chat-listing-price");
+    const priceText = String(conversation.listingPrice || "").trim();
+    if (priceElement) {
+      priceElement.textContent = priceText;
+      priceElement.hidden = !priceText;
+    }
+
+    const listingImageElement = document.getElementById("vx-chat-listing-image");
+    const listingPlaceholder = document.getElementById("vx-chat-listing-placeholder");
+    const listingImage = String(conversation.listingImage || "").trim();
+    if (listingImageElement && listingPlaceholder) {
+      if (listingImage) {
+        listingImageElement.onerror = () => {
+          listingImageElement.hidden = true;
+          listingPlaceholder.hidden = false;
+        };
+        listingImageElement.src = listingImage;
+        listingImageElement.hidden = false;
+        listingPlaceholder.hidden = true;
+      } else {
+        listingImageElement.onerror = null;
+        listingImageElement.removeAttribute("src");
+        listingImageElement.hidden = true;
+        listingPlaceholder.hidden = false;
+      }
+    }
 
     const currentUserId = currentSession?.user?.id || "";
+    const peerId = conversation.buyer_id === currentUserId
+      ? conversation.seller_id
+      : conversation.buyer_id;
+    const profileRequest = ++peerProfileRequest;
+    peerProfile = { displayName: "", avatarUrl: "" };
+    renderPeerProfile();
+    void loadPeerProfile(conversation.id, currentUserId, peerId, profileRequest);
+
     window.dispatchEvent(new CustomEvent("vortex:chat-thread-open", {
-      detail: {
-        conversationId: conversation.id,
-        currentUserId,
-        peerId: conversation.buyer_id === currentUserId
-          ? conversation.seller_id
-          : conversation.buyer_id
-      }
+      detail: { conversationId: conversation.id, currentUserId, peerId }
     }));
 
     stopRealtime();
@@ -505,10 +731,14 @@
       id: conversationId,
       listing_id: listing.id,
       buyer_id: currentSession.user.id,
-      listingTitle: listing.title || "Объявление"
+      listingTitle: listing.title || "Объявление",
+      listingPrice: listing.price || "",
+      listingImage: listing.image || ""
     };
 
     conversation.listingTitle = listing.title || conversation.listingTitle;
+    conversation.listingPrice = listing.price || conversation.listingPrice || "";
+    conversation.listingImage = listing.image || conversation.listingImage || "";
     openThread(conversation);
     loadInbox();
   }
@@ -578,10 +808,34 @@
 
   document.getElementById("vx-chat-back").addEventListener("click", () => {
     stopRealtime();
+    chatDialog.classList.remove("vx-chat-thread-open");
     activeConversation = null;
+    peerProfileRequest++;
+    peerProfile = { displayName: "", avatarUrl: "" };
+    renderPeerProfile();
     threadPanel.hidden = true;
     inboxListPanel.hidden = false;
     loadInbox();
+  });
+
+  function resizeChatMessageInput() {
+    messageInput.style.height = "auto";
+    const maxHeight = 120;
+    const contentHeight = messageInput.scrollHeight;
+    messageInput.style.height = `${Math.min(contentHeight, maxHeight)}px`;
+    messageInput.style.overflowY = contentHeight > maxHeight ? "auto" : "hidden";
+  }
+
+  messageInput.addEventListener("input", resizeChatMessageInput);
+  resizeChatMessageInput();
+
+  messageInput.addEventListener("keydown", event => {
+    if (event.key !== "Enter" || event.shiftKey ||
+        event.ctrlKey || event.altKey || event.metaKey ||
+        event.isComposing || event.keyCode === 229) return;
+
+    event.preventDefault();
+    messageInput.form?.requestSubmit();
   });
 
   document.getElementById("vx-chat-send-form").addEventListener("submit", async event => {
@@ -596,6 +850,7 @@
     if (!body) return;
 
     const sendButton = event.currentTarget.querySelector('[type="submit"]');
+    if (sendButton.disabled) return;
     sendButton.disabled = true;
 
     const { error } = await client.from("messages").insert({
@@ -612,6 +867,7 @@
     }
 
     messageInput.value = "";
+    resizeChatMessageInput();
     setStatus("Сообщение отправлено внутри ВОРТЕКС.");
     loadMessages();
     loadInbox();
@@ -628,7 +884,9 @@
 
       const listing = {
         id: button.dataset.vxListingId || "",
-        title: card.querySelector("h3")?.textContent.trim() || "Объявление"
+        title: card.querySelector("h3")?.textContent.trim() || "Объявление",
+        price: card.querySelector(".price")?.textContent.trim() || "",
+        image: card.querySelector(".card-image")?.src || ""
       };
 
       if (!currentSession) {
@@ -661,6 +919,38 @@
     notice.querySelector("[data-chat-login-from-form]").addEventListener("click", showChat);
     updateListingNotice();
 
+    async function uploadListingPhoto(dataURL) {
+      const prefix = "data:image/jpeg;base64,";
+      if (typeof dataURL !== "string" || !dataURL.startsWith(prefix)) {
+        throw new Error("Фото не подготовлено в формате JPEG.");
+      }
+
+      const binary = atob(dataURL.slice(prefix.length));
+      const bytes = new Uint8Array(binary.length);
+      for (let index = 0; index < binary.length; index++) {
+        bytes[index] = binary.charCodeAt(index);
+      }
+
+      const blob = new Blob([bytes], { type: "image/jpeg" });
+      if (blob.size === 0 || blob.size > 512000) {
+        throw new Error("Фото должно быть в формате JPEG размером до 500 КБ.");
+      }
+
+      const fileId = window.crypto?.randomUUID?.()
+        || `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+      const path = `${currentSession.user.id}/${fileId}.jpg`;
+      const { error } = await client.storage
+        .from("listing-images")
+        .upload(path, blob, {
+          cacheControl: "31536000",
+          contentType: "image/jpeg",
+          upsert: false
+        });
+
+      if (error) throw error;
+      return path;
+    }
+
     listingForm.addEventListener("submit", async event => {
       if (!currentSession) return;
 
@@ -677,25 +967,46 @@
         "Публикуем объявление на сервере…";
 
       try {
+        const listingData = {
+          owner_id: currentSession.user.id,
+          category: get("category"),
+          location: get("location"),
+          title: get("title"),
+          description: get("description"),
+          price: get("price"),
+          contact: get("contact")
+        };
+
+        if (imageWasAdded) {
+          notice.querySelector("[data-chat-listing-note-text]").textContent =
+            "Загружаем фото объявления…";
+          try {
+            listingData.image_path = await uploadListingPhoto(get("image"));
+          } catch (uploadError) {
+            notice.querySelector("[data-chat-listing-note-text]").textContent =
+              "Не удалось загрузить фото: " +
+              (uploadError.message || "попробуйте позже");
+            return;
+          }
+        }
+
+        notice.querySelector("[data-chat-listing-note-text]").textContent =
+          "Публикуем объявление на сервере…";
         const { error } = await client
           .from("listings")
-          .insert({
-            owner_id: currentSession.user.id,
-            category: get("category"),
-            location: get("location"),
-            title: get("title"),
-            description: get("description"),
-            price: get("price"),
-            contact: get("contact")
-          });
+          .insert(listingData);
 
         if (error) {
           notice.querySelector("[data-chat-listing-note-text]").textContent =
-            "Не удалось опубликовать: " + error.message;
+            "Не удалось опубликовать: " + error.message
+            + (listingData.image_path
+              ? " Фото загружено, но не привязано к объявлению."
+              : "");
           return;
         }
 
         listingForm.reset();
+        document.getElementById("removeListingImage")?.click();
         document.getElementById("listingDialog")?.close();
 
         const query = document.getElementById("query");
@@ -710,7 +1021,7 @@
         }
 
         alert(imageWasAdded
-          ? "Объявление опубликовано для всех. Фото пока не загружается на сервер."
+          ? "Объявление и фото опубликованы для всех. Теперь можно получать сообщения в чате."
           : "Объявление опубликовано для всех. Теперь можно получать сообщения в чате.");
       } catch (error) {
         notice.querySelector("[data-chat-listing-note-text]").textContent =
