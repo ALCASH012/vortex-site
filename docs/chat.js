@@ -444,6 +444,17 @@
     document.getElementById("vx-chat-thread-title").textContent =
       "Объявление: " + (conversation.listingTitle || "Объявление");
 
+    const currentUserId = currentSession?.user?.id || "";
+    window.dispatchEvent(new CustomEvent("vortex:chat-thread-open", {
+      detail: {
+        conversationId: conversation.id,
+        currentUserId,
+        peerId: conversation.buyer_id === currentUserId
+          ? conversation.seller_id
+          : conversation.buyer_id
+      }
+    }));
+
     stopRealtime();
     realtimeChannel = client
       .channel("vx-chat-" + conversation.id)
