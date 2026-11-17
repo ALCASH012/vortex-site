@@ -77,6 +77,33 @@
       color:inherit; background:#ffffff09; text-align:left;
       white-space:pre-line; font:inherit; font-size:12px;
       line-height:1.5; cursor:pointer;
+    }    .vx-chat-inbox-row {
+      display: flex;
+      align-items: stretch;
+      gap: 6px;
+      margin: 7px 0;
+    }
+    .vx-chat-inbox-row .vx-chat-conversation {
+      flex: 1;
+      min-width: 0;
+      width: auto;
+      margin: 0;
+    }
+    .vx-chat-hide-conversation {
+      flex: none;
+      padding: 0 10px;
+      border: 1px solid currentColor;
+      border-radius: 10px;
+      color: inherit;
+      background: transparent;
+      font: inherit;
+      font-size: 12px;
+      cursor: pointer;
+      opacity: .85;
+    }
+    .vx-chat-hide-conversation:hover {
+      opacity: 1;
+      background: #8882;
     }
     .vx-chat-messages {
       display:flex; flex-direction:column; gap:8px;
@@ -458,7 +485,34 @@
       return;
     }
 
-    const conversations = Array.isArray(data) ? data : [];
+        let conversations = Array.isArray(data) ? data : [];
+
+    const { data: hiddenRows, error: hiddenError } = await client
+      .from("conversation_hides")
+      .select("conversation_id,hidden_at")
+      .eq("user_id", currentSession.user.id);
+
+    if (hiddenError) {
+      setStatus("Не удалось загрузить скрытые переписки: " + hiddenError.message);
+      return;
+    }
+
+    const hiddenByConversation = new Map(
+      (Array.isArray(hiddenRows) ? hiddenRows : []).map(item => [
+        item.conversation_id,
+        Date.parse(item.hidden_at)
+      ])
+    );
+
+    conversations = conversations.filter(conversation => {
+      const hiddenAt = hiddenByConversation.get(conversation.id);
+      if (hiddenAt === undefined) return true;
+
+      const lastMessageAt = Date.parse(conversation.last_message_at || "");
+      return Number.isFinite(hiddenAt)
+        && Number.isFinite(lastMessageAt)
+        && lastMessageAt > hiddenAt;
+    });
     conversationCache.clear();
 
     const listingIds = [...new Set(conversations.map(item => item.listing_id).filter(Boolean))];
@@ -500,6 +554,8 @@
       conversation.listingImage = details.image || "";
       conversationCache.set(conversation.id, conversation);
 
+            const row = document.createElement("div");
+      row.className = "vx-chat-inbox-row";
       const button = document.createElement("button");
       button.type = "button";
       button.className = "vx-chat-conversation";
@@ -515,7 +571,51 @@
 
       button.textContent = `${title}\n${role}${date ? " · " + date : ""}`;
       button.addEventListener("click", () => openThread(conversation));
-      inboxList.append(button);
+            row.append(button);
+
+      const hideButton = document.createElement("button");
+      hideButton.type = "button";
+      hideButton.className = "vx-chat-hide-conversation";
+      hideButton.textContent = "Скрыть";
+      hideButton.title = "Скрыть только у себя; новое сообщение вернёт чат";
+
+      hideButton.addEventListener("click", async event => {
+        event.stopPropagation();
+        const userId = currentSession?.user?.id;
+        if (!userId) return;
+
+        if (!window.confirm(
+          `Скрыть переписку «${title}» только у себя? Новое сообщение вернёт её в список.`
+        )) return;
+
+        hideButton.disabled = true;
+
+        try {
+          const { error: deleteError } = await client
+            .from("conversation_hides")
+            .delete()
+            .eq("user_id", userId)
+            .eq("conversation_id", conversation.id);
+          if (deleteError) throw deleteError;
+
+          const { error: insertError } = await client
+            .from("conversation_hides")
+            .insert({
+              user_id: userId,
+              conversation_id: conversation.id
+            });
+          if (insertError) throw insertError;
+
+          await loadInbox();
+          setStatus("Переписка скрыта только у вас. Новое сообщение вернёт её в список.");
+        } catch (error) {
+          setStatus("Не удалось скрыть переписку: " + (error.message || "попробуйте позже"));
+          hideButton.disabled = false;
+        }
+      });
+
+      row.append(hideButton);
+      inboxList.append(row);
     });
   }
 
