@@ -795,7 +795,28 @@ dialog form { color: var(--ink); }
       });
 
       document.getElementById("resultCount").textContent = `Найдено: ${filtered.length}`;
-      document.getElementById("cards").innerHTML = filtered.map(renderCard).join("");
+            const nowForBoost = Date.now();
+      const ordered = filtered
+        .map((item, index) => ({ item, index }))
+        .sort((a, b) => {
+          const aExpires = Date.parse(a.item.bumpExpiresAt || "");
+          const bExpires = Date.parse(b.item.bumpExpiresAt || "");
+          const aActive = Number.isFinite(aExpires) && aExpires > nowForBoost;
+          const bActive = Number.isFinite(bExpires) && bExpires > nowForBoost;
+
+          if (aActive !== bActive) return aActive ? -1 : 1;
+
+          if (aActive) {
+            const aBumped = Date.parse(a.item.bumpedAt || "") || 0;
+            const bBumped = Date.parse(b.item.bumpedAt || "") || 0;
+            return (bBumped - aBumped) || (a.index - b.index);
+          }
+
+          return a.index - b.index;
+        })
+        .map(entry => entry.item);
+
+      document.getElementById("cards").innerHTML = ordered.map(renderCard).join("");
       document.getElementById("emptyState").hidden = filtered.length !== 0;
     }
 
@@ -957,5 +978,6 @@ dialog form { color: var(--ink); }
   <script src="./profile-cloud.js?v=2" defer></script>
   <script src="./chat.js?v=7" defer></script>
   <script src="./calls.js?v=2" defer></script>
+  <script src="./listing-details.js?v=1" defer></script>
 </body>
 </html>

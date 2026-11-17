@@ -29,7 +29,7 @@
   async function loadListings() {
     const { data, error } = await client
       .from("listings")
-      .select("id,owner_id,category,location,title,description,price,image_path,created_at,expires_at")
+      .select("id,owner_id,category,location,title,description,price,image_path,created_at,expires_at,bumped_at,bump_expires_at")
       .eq("status", "published")
       .gt("expires_at", new Date().toISOString())
       .order("created_at", { ascending: false })
@@ -48,9 +48,12 @@
       contact: "",
       image: item.image_path ? client.storage.from("listing-images").getPublicUrl(item.image_path).data.publicUrl : "",
       createdAt: item.created_at,
-      expiresAt: item.expires_at
+      expiresAt: item.expires_at,
+      bumpedAt: item.bumped_at,
+      bumpExpiresAt: item.bump_expires_at
     }));
 
+    window.VORTEX_SUPABASE_LISTINGS = listings;
     window.dispatchEvent(new CustomEvent("vortex:supabase-listings", {
       detail: { listings }
     }));
