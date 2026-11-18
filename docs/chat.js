@@ -1074,7 +1074,17 @@
           title: get("title"),
           description: get("description"),
           price: get("price"),
-          contact: get("contact")
+          contact: get("contact"),
+rooms: get("category") === "housing" ? (get("rooms") || null) : null,
+area_sqm: get("category") === "housing" && get("area_sqm") !== ""
+  ? Number(get("area_sqm"))
+  : null,
+employment: get("category") === "jobs" ? (get("employment") || null) : null,
+salary: get("category") === "jobs" && get("salary") !== ""
+  ? Number(get("salary"))
+  : null,
+pet_kind: get("category") === "pets" ? (get("pet_kind") || null) : null,
+condition: get("category") === "sales" ? (get("condition") || null) : null
         };
 
         if (imageWasAdded) {

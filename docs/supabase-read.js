@@ -29,7 +29,7 @@
   async function loadListings() {
     const { data, error } = await client
       .from("listings")
-      .select("id,owner_id,category,location,title,description,price,image_path,created_at,expires_at,bumped_at,bump_expires_at")
+      .select("id,owner_id,category,location,title,description,price,image_path,created_at,expires_at,bumped_at,bump_expires_at,rooms,area_sqm,employment,salary,pet_kind,condition")
       .eq("status", "published")
       .gt("expires_at", new Date().toISOString())
       .order("created_at", { ascending: false })
@@ -45,6 +45,12 @@
       title: item.title,
       description: item.description,
       price: item.price || "",
+      rooms: item.rooms || "",
+areaSqm: item.area_sqm ?? "",
+employment: item.employment || "",
+salary: item.salary ?? "",
+petKind: item.pet_kind || "",
+condition: item.condition || "",
       contact: "",
       image: item.image_path ? client.storage.from("listing-images").getPublicUrl(item.image_path).data.publicUrl : "",
       createdAt: item.created_at,

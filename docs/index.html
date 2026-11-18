@@ -115,11 +115,197 @@
 
     .filters {
       display: grid;
-      grid-template-columns: 2fr 1fr 1fr;
+     grid-template-columns: 2fr 1fr 1fr 1fr;
       gap: 12px;
       margin-top: 24px;
     }
+#priceSort option,
+#listingForm select option {
+  color: #172033 !important;
+  background-color: #ffffff !important;
+}
 
+.vx-category-field[hidden] {
+  display: none !important;
+}
+    .vx-category-picker {
+      position: relative;
+      min-width: 0;
+    }
+
+    .vx-category-picker .vx-category-native {
+      position: absolute !important;
+      left: 0 !important;
+      bottom: 0 !important;
+      width: 1px !important;
+      height: 1px !important;
+      padding: 0 !important;
+      margin: -1px !important;
+      overflow: hidden !important;
+      clip: rect(0, 0, 0, 0) !important;
+      clip-path: inset(50%) !important;
+      white-space: nowrap !important;
+      border: 0 !important;
+    }
+
+    .vx-category-trigger {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      width: 100%;
+      min-height: 46px;
+      padding: 7px 11px;
+      border: 1px solid rgba(255, 255, 255, .2);
+      border-radius: 14px;
+      color: #f3f0e9;
+      background: rgba(255, 255, 255, .08);
+      font: inherit;
+      text-align: left;
+      cursor: pointer;
+      transition: border-color .18s, background .18s, box-shadow .18s;
+    }
+
+    .vx-category-trigger:hover,
+    .vx-category-picker.is-open .vx-category-trigger {
+      border-color: #d8c9a8;
+      background: rgba(255, 255, 255, .12);
+    }
+
+    .vx-category-trigger:focus-visible,
+    .vx-category-option:focus-visible {
+      outline: 2px solid #d8c9a8;
+      outline-offset: 2px;
+    }
+
+    .vx-category-trigger-icon,
+    .vx-category-option-icon {
+      display: grid;
+      place-items: center;
+      flex: 0 0 34px;
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, .09);
+      font-size: 17px;
+    }
+
+    .vx-category-trigger-label {
+      flex: 1;
+      font-weight: 700;
+    }
+
+    .vx-category-trigger-chevron {
+      color: #d8c9a8;
+      font-size: 20px;
+      transition: transform .18s;
+    }
+
+    .vx-category-picker.is-open .vx-category-trigger-chevron {
+      transform: rotate(180deg);
+    }
+
+    .vx-category-menu {
+      position: absolute;
+      z-index: 30;
+      top: calc(100% + 8px);
+      right: 0;
+      left: 0;
+      display: grid;
+      gap: 4px;
+      padding: 7px;
+      border: 1px solid rgba(255, 255, 255, .16);
+      border-radius: 15px;
+      background: #1d232b;
+      box-shadow: 0 16px 38px rgba(0, 0, 0, .42);
+    }
+
+    .vx-category-menu[hidden] {
+      display: none !important;
+    }
+
+    .vx-category-option {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+      padding: 8px 10px;
+      border: 1px solid transparent;
+      border-radius: 11px;
+      color: #f3f0e9;
+      background: transparent;
+      font: inherit;
+      text-align: left;
+      cursor: pointer;
+      transition: background .15s, border-color .15s;
+    }
+
+    .vx-category-option:hover {
+      background: rgba(255, 255, 255, .08);
+    }
+
+    .vx-category-option[aria-selected="true"] {
+      border-color: rgba(170, 210, 190, .35);
+      background: rgba(170, 210, 190, .12);
+    }
+
+    .vx-category-option-copy {
+      display: flex;
+      flex: 1;
+      flex-direction: column;
+      gap: 2px;
+      min-width: 0;
+    }
+
+    .vx-category-option-copy strong {
+      color: #f3f0e9;
+      font-size: 13px;
+    }
+
+    .vx-category-option-copy small {
+      color: #aab2bc;
+      font-size: 11px;
+    }
+
+    .vx-category-option-check {
+      color: #c6ead9;
+      opacity: 0;
+    }
+
+    .vx-category-option[aria-selected="true"] .vx-category-option-check {
+      opacity: 1;
+    }
+
+    body.light-theme .vx-category-trigger {
+      border-color: #dce5de;
+      color: #25332b;
+      background: #fff;
+    }
+
+    body.light-theme .vx-category-menu {
+      border-color: #dce5de;
+      background: #fff;
+    }
+
+    body.light-theme .vx-category-option {
+      color: #25332b;
+    }
+
+    body.light-theme .vx-category-option:hover {
+      background: #f3f7f4;
+    }
+
+    body.light-theme .vx-category-option[aria-selected="true"] {
+      border-color: #b8d4c3;
+      background: #eaf4ed;
+    }
+
+    body.light-theme .vx-category-option-copy strong {
+      color: #25332b;
+    }
+
+    body.light-theme .vx-category-option-copy small {
+      color: #68756e;
+    }
     .field {
       display: flex;
       flex-direction: column;
@@ -496,6 +682,58 @@ dialog form { color: var(--ink); }
   <link rel="stylesheet" href="./sales.css?v=2">
   <link rel="stylesheet" href="./chat-theme.css?v=8">
 </head>
+<style>
+#filterRooms option,
+#filterEmployment option,
+#filterPetKind option,
+#filterCondition option,
+#priceSort option,
+#categoryFilter option {
+  background-color: #252b35 !important;
+  color: #f4ead6 !important;
+}
+
+#filterRooms option:checked,
+#filterEmployment option:checked,
+#filterPetKind option:checked,
+#filterCondition option:checked,
+#priceSort option:checked,
+#categoryFilter option:checked {
+  background-color: #315fa8 !important;
+  color: #ffffff !important;
+}
+.hero {
+  position: relative;
+  z-index: 20;
+  overflow: visible !important;
+}
+
+.filters {
+  position: relative;
+  z-index: 30;
+  overflow: visible !important;
+}
+
+.filters .vx-category-picker {
+  position: relative;
+  z-index: 40;
+}
+
+.filters .vx-category-picker .vx-category-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  right: 0;
+  z-index: 9999 !important;
+  max-height: min(360px, 55vh);
+  overflow-y: auto;
+  background: #1b2028 !important;
+  opacity: 1 !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  box-shadow: 0 18px 42px rgba(0, 0, 0, 0.55);
+}
+</style>
 <body>
   <header class="topbar">
     <div class="container nav">
@@ -514,6 +752,15 @@ dialog form { color: var(--ink); }
       <p class="hero-copy">Ищите объявления, квартиры и объявления о поиске или пристройстве питомцев.</p>
 
       <div class="filters">
+
+        <label class="field">
+  <span>Сортировка</span>
+  <select id="priceSort">
+    <option value="default">Обычный порядок</option>
+    <option value="price-asc">Сначала дешевле</option>
+    <option value="price-desc">Сначала дороже</option>
+  </select>
+</label>
         <label class="field">
           <span>Что ищете?</span>
           <input id="query" type="search" placeholder="Должность, квартира, питомец...">
@@ -522,7 +769,7 @@ dialog form { color: var(--ink); }
           <span>Город</span>
           <input id="city" type="text" placeholder="Например, Москва">
         </label>
-        <label class="field">
+        <label class="field" style="display:none">
           <span>Раздел</span>
           <select id="categoryFilter">
             <option value="all">Все разделы</option>
@@ -532,6 +779,139 @@ dialog form { color: var(--ink); }
             <option value="sales">Продажи</option>
 </select>
         </label>
+        <label class="field" data-category-filter="housing" style="display:none">
+  <span>Комнаты</span>
+  <select id="filterRooms">
+    <option value="">Любое число</option>
+    <option value="studio">Студия</option>
+    <option value="1">1 комната</option>
+    <option value="2">2 комнаты</option>
+    <option value="3">3 комнаты</option>
+    <option value="4+">4 и больше</option>
+  </select>
+</label>
+
+<label class="field" data-category-filter="housing" style="display:none">
+  <span>Площадь от, м²</span>
+  <input id="filterAreaMin" type="number" min="0" step="any" placeholder="Без минимума">
+</label>
+
+<label class="field" data-category-filter="housing" style="display:none">
+  <span>Площадь до, м²</span>
+  <input id="filterAreaMax" type="number" min="0" step="any" placeholder="Без максимума">
+</label>
+
+<div class="field vx-category-picker"
+     data-category-filter="jobs"
+     style="display:none">
+  <span id="filterEmploymentLabel">Занятость</span>
+
+  <select id="filterEmployment"
+          class="vx-category-native"
+          aria-labelledby="filterEmploymentLabel">
+    <option value="">Любая</option>
+    <option value="full">Полная</option>
+    <option value="shift">Сменная</option>
+    <option value="remote">Удалённая</option>
+    <option value="part">Частичная</option>
+    <option value="gig">Подработка</option>
+  </select>
+
+  <button class="vx-category-trigger"
+          type="button"
+          aria-haspopup="listbox"
+          aria-expanded="false"
+          aria-controls="filterEmploymentMenu">
+    <span class="vx-category-trigger-icon" aria-hidden="true">💼</span>
+    <span class="vx-category-trigger-label">Любая</span>
+    <span class="vx-category-trigger-chevron" aria-hidden="true">⌄</span>
+  </button>
+
+  <div class="vx-category-menu"
+       id="filterEmploymentMenu"
+       role="listbox"
+       aria-labelledby="filterEmploymentLabel"
+       hidden>
+    <button class="vx-category-option" type="button" role="option"
+            data-filter-value="" aria-selected="true">
+      <span class="vx-category-option-icon" aria-hidden="true">✨</span>
+      <span class="vx-category-option-copy">
+        <strong>Любая</strong><small>Без ограничения</small>
+      </span>
+    </button>
+
+    <button class="vx-category-option" type="button" role="option"
+            data-filter-value="full" aria-selected="false">
+      <span class="vx-category-option-icon" aria-hidden="true">💼</span>
+      <span class="vx-category-option-copy">
+        <strong>Полная</strong><small>Полный рабочий день</small>
+      </span>
+    </button>
+
+    <button class="vx-category-option" type="button" role="option"
+            data-filter-value="shift" aria-selected="false">
+      <span class="vx-category-option-icon" aria-hidden="true">🕒</span>
+      <span class="vx-category-option-copy">
+        <strong>Сменная</strong><small>Работа по сменам</small>
+      </span>
+    </button>
+
+    <button class="vx-category-option" type="button" role="option"
+            data-filter-value="remote" aria-selected="false">
+      <span class="vx-category-option-icon" aria-hidden="true">🌐</span>
+      <span class="vx-category-option-copy">
+        <strong>Удалённая</strong><small>Можно работать из любой точки</small>
+      </span>
+    </button>
+
+    <button class="vx-category-option" type="button" role="option"
+            data-filter-value="part" aria-selected="false">
+      <span class="vx-category-option-icon" aria-hidden="true">⏱️</span>
+      <span class="vx-category-option-copy">
+        <strong>Частичная</strong><small>Неполный рабочий день</small>
+      </span>
+    </button>
+
+    <button class="vx-category-option" type="button" role="option"
+            data-filter-value="gig" aria-selected="false">
+      <span class="vx-category-option-icon" aria-hidden="true">🛠️</span>
+      <span class="vx-category-option-copy">
+        <strong>Подработка</strong><small>Разовые задачи и подработка</small>
+      </span>
+    </button>
+  </div>
+</div>
+
+<label class="field" data-category-filter="jobs" style="display:none">
+  <span>Зарплата от, ₽</span>
+  <input id="filterSalaryMin" type="number" min="0" step="any" placeholder="Без минимума">
+</label>
+
+<label class="field" data-category-filter="jobs" style="display:none">
+  <span>Зарплата до, ₽</span>
+  <input id="filterSalaryMax" type="number" min="0" step="any" placeholder="Без максимума">
+</label>
+
+<label class="field" data-category-filter="pets" style="display:none">
+  <span>Вид животного</span>
+  <select id="filterPetKind">
+    <option value="">Любой</option>
+    <option value="dog">Собака</option>
+    <option value="cat">Кошка</option>
+    <option value="bird">Птица</option>
+    <option value="rodent">Грызун</option>
+    <option value="other">Другое</option>
+  </select>
+</label>
+
+<label class="field" data-category-filter="sales" style="display:none">
+  <span>Состояние</span>
+  <select id="filterCondition">
+    <option value="">Любое</option>
+    <option value="new">Новое</option>
+    <option value="used">Б/у</option>
+  </select>
+</label>
       </div>
     </section>
 
@@ -562,15 +942,63 @@ dialog form { color: var(--ink); }
       </div>
 
       <div class="dialog-fields">
-        <label class="field">
-          <span>Раздел</span>
-          <select name="category" required>
-            <option value="jobs">Работа</option>
-            <option value="housing">Жильё</option>
-            <option value="pets">Питомцы</option>
-            <option value="sales">Продажи</option>
-</select>
-        </label>
+        <div class="field vx-category-picker">
+  <span id="listingCategoryLabel">Раздел</span>
+
+  <select name="category" required class="vx-category-native"
+          aria-labelledby="listingCategoryLabel">
+    <option value="jobs">Работа</option>
+    <option value="housing">Жильё</option>
+    <option value="pets">Питомцы</option>
+    <option value="sales">Продажи</option>
+  </select>
+
+  <button class="vx-category-trigger" type="button"
+          aria-haspopup="listbox"
+          aria-expanded="false"
+          aria-controls="listingCategoryMenu">
+    <span class="vx-category-trigger-icon" aria-hidden="true">💼</span>
+    <span class="vx-category-trigger-label">Работа</span>
+    <span class="vx-category-trigger-chevron" aria-hidden="true">⌄</span>
+  </button>
+
+  <div class="vx-category-menu" id="listingCategoryMenu"
+       role="listbox"
+       aria-labelledby="listingCategoryLabel"
+       hidden>
+    <button class="vx-category-option" type="button" role="option"
+            data-category-value="jobs" aria-selected="true">
+      <span class="vx-category-option-icon" aria-hidden="true">💼</span>
+      <span class="vx-category-option-copy">
+        <strong>Работа</strong><small>Вакансии и предложения</small>
+      </span>
+    </button>
+
+    <button class="vx-category-option" type="button" role="option"
+            data-category-value="housing" aria-selected="false">
+      <span class="vx-category-option-icon" aria-hidden="true">🏠</span>
+      <span class="vx-category-option-copy">
+        <strong>Жильё</strong><small>Квартиры, комнаты и аренда</small>
+      </span>
+    </button>
+
+    <button class="vx-category-option" type="button" role="option"
+            data-category-value="pets" aria-selected="false">
+      <span class="vx-category-option-icon" aria-hidden="true">🐾</span>
+      <span class="vx-category-option-copy">
+        <strong>Питомцы</strong><small>Поиск дома и пристройство</small>
+      </span>
+    </button>
+
+    <button class="vx-category-option" type="button" role="option"
+            data-category-value="sales" aria-selected="false">
+      <span class="vx-category-option-icon" aria-hidden="true">🛍️</span>
+      <span class="vx-category-option-copy">
+        <strong>Продажи</strong><small>Товары для продажи</small>
+      </span>
+    </button>
+  </div>
+</div>
 
         <label class="field">
           <span>Город</span>
@@ -588,10 +1016,65 @@ dialog form { color: var(--ink); }
         </label>
 
         <label class="field">
-          <span>Цена или зарплата</span>
+          <span id="listingPriceLabel">Зарплата</span>
           <input name="price" maxlength="50" placeholder="Необязательно">
         </label>
+        <label class="field vx-category-field" data-category-field="housing" hidden>
+          <span>Комнаты</span>
+          <select name="rooms">
+            <option value="">Не указано</option>
+            <option value="studio">Студия</option>
+            <option value="1">1 комната</option>
+            <option value="2">2 комнаты</option>
+            <option value="3">3 комнаты</option>
+            <option value="4+">4 и более</option>
+          </select>
+        </label>
 
+        <label class="field vx-category-field" data-category-field="housing" hidden>
+          <span>Площадь, м²</span>
+          <input name="area_sqm" type="number" min="0.1" step="0.1" placeholder="Например, 45">
+        </label>
+
+        <label class="field vx-category-field" data-category-field="jobs" hidden>
+          <span>Занятость</span>
+          <select name="employment">
+            <option value="">Не указано</option>
+            <option value="full">Полный день</option>
+            <option value="shift">Вахта</option>
+            <option value="remote">Удалённая работа</option>
+            <option value="part">Частичная занятость</option>
+            <option value="gig">Разовая работа</option>
+          </select>
+        </label>
+
+        <label class="field vx-category-field" data-category-field="jobs" hidden>
+          <span>Зарплата, ₽ — для фильтра</span>
+          <input name="salary" type="number" min="0" step="1" placeholder="Например, 120000">
+        </label>
+
+        <label class="field vx-category-field" data-category-field="pets" hidden>
+          <span>Вид животного</span>
+          <select name="pet_kind">
+            <option value="">Не указано</option>
+            <option value="dog">Собака</option>
+            <option value="cat">Кошка</option>
+            <option value="bird">Птица</option>
+            <option value="rodent">Грызун</option>
+            <option value="other">Другое</option>
+          </select>
+        </label>
+
+        <label class="field vx-category-field" data-category-field="sales" hidden>
+          <span>Состояние товара</span>
+          <select name="condition">
+            <option value="">Не указано</option>
+            <option value="new">Новое</option>
+            <option value="used">Б/у</option>
+          </select>
+        </label>
+<label class="field">
+  <span>Контакт</span>
         <label class="field">
           <span>Контакт</span>
           <input name="contact" required maxlength="120" placeholder="email@example.com">
@@ -686,7 +1169,7 @@ dialog form { color: var(--ink); }
         if (!saved) return [...seedListings];
 
         const parsed = JSON.parse(saved);
-        return Array.isArray(parsed) ? parsed : [...seedListings];
+              return Array.isArray(parsed) && parsed.length > 0 ? parsed : [...seedListings];
       } catch {
         return [...seedListings];
       }
@@ -774,31 +1257,90 @@ dialog form { color: var(--ink); }
     }
 
     function render() {
-      const query = document.getElementById("query").value.trim().toLocaleLowerCase("ru");
-      const city = document.getElementById("city").value.trim().toLocaleLowerCase("ru");
-      const category = document.getElementById("categoryFilter").value;
+          function priceValue(value) {
+      const raw = String(value || "");
+      if (raw.includes("₽") && !/[0-9]/.test(raw)) return Infinity;
+      if (/договор|бесплатно|обмен/i.test(raw) && !/[0-9]/.test(raw)) return Infinity;
+      const digits = raw.replace(/\s/g, "").replace(/[^\d.,-]/g, "");
+      if (!/[0-9]/.test(digits)) return Infinity;
+      const normalized = digits.replace(",", ".");
+      const parsed = Number.parseFloat(normalized);
+      return Number.isFinite(parsed) && parsed >= 0 ? parsed : Infinity;
+    }
+     const query = document.getElementById("query").value.trim().toLocaleLowerCase("ru");
+const city = document.getElementById("city").value.trim().toLocaleLowerCase("ru");
+const category = document.getElementById("categoryFilter").value;
+document.querySelectorAll("[data-category-filter]").forEach(field => {
+  field.style.display =
+    field.dataset.categoryFilter === category ? "" : "none";
+});
+const rooms = document.getElementById("filterRooms")?.value || "";
+const areaMin = document.getElementById("filterAreaMin")?.value || "";
+const areaMax = document.getElementById("filterAreaMax")?.value || "";
+const employment = document.getElementById("filterEmployment")?.value || "";
+const salaryMin = document.getElementById("filterSalaryMin")?.value || "";
+const salaryMax = document.getElementById("filterSalaryMax")?.value || "";
+const petKind = document.getElementById("filterPetKind")?.value || "";
+const condition = document.getElementById("filterCondition")?.value || "";
 
-      const filtered = listings.filter(item => {
-        const searchable = [
-          item.title,
-          item.description,
-          item.location,
-          item.price,
-          categoryLabels[item.category]
-        ].join(" ").toLocaleLowerCase("ru");
+const inRange = (value, min, max) => {
+  if (!min && !max) return true;
 
-        const place = String(item.location || "").toLocaleLowerCase("ru");
+  if (
+    value === "" ||
+    value === null ||
+    value === undefined ||
+    !Number.isFinite(Number(value))
+  ) return false;
 
-        return (!query || searchable.includes(query))
-          && (!city || place.includes(city))
-          && (category === "all" || item.category === category);
-      });
+  const number = Number(value);
+  return (!min || number >= Number(min)) &&
+    (!max || number <= Number(max));
+};
+
+const filtered = listings.filter(item => {
+  const searchable = [
+    item.title,
+    item.description,
+    item.location,
+    item.price,
+    categoryLabels[item.category]
+  ].join(" ").toLocaleLowerCase("ru");
+
+  const place = String(item.location || "").toLocaleLowerCase("ru");
+
+  return (!query || searchable.includes(query))
+    && (!city || place.includes(city))
+    && (category === "all" || item.category === category)
+   && (category !== "housing" || (
+      (!rooms || item.rooms === rooms) &&
+      inRange(item.areaSqm, areaMin, areaMax)
+    ))
+    && (category !== "jobs" || (
+      (!employment || item.employment === employment) &&
+      inRange(item.salary, salaryMin, salaryMax)
+    ))
+    && (category !== "pets" || !petKind || item.petKind === petKind)
+    && (category !== "sales" || !condition || item.condition === condition);
+});
 
       document.getElementById("resultCount").textContent = `Найдено: ${filtered.length}`;
-            const nowForBoost = Date.now();
+                 const nowForBoost = Date.now();
+      const priceSort = document.getElementById("priceSort")?.value || "default";
+      const priceDescending = priceSort === "price-desc";
+
       const ordered = filtered
-        .map((item, index) => ({ item, index }))
+        .map((item, index) => ({ item, index, price: priceValue(item.price) }))
         .sort((a, b) => {
+          if (priceSort === "price-asc" || priceDescending) {
+            const aHasPrice = a.price !== Infinity;
+            const bHasPrice = b.price !== Infinity;
+            if (aHasPrice !== bHasPrice) return aHasPrice ? -1 : 1;
+            if (aHasPrice && bHasPrice && a.price !== b.price) {
+              return priceDescending ? b.price - a.price : a.price - b.price;
+            }
+            return a.index - b.index;
+          }
           const aExpires = Date.parse(a.item.bumpExpiresAt || "");
           const bExpires = Date.parse(b.item.bumpExpiresAt || "");
           const aActive = Number.isFinite(aExpires) && aExpires > nowForBoost;
@@ -823,10 +1365,208 @@ dialog form { color: var(--ink); }
     document.getElementById("query").addEventListener("input", render);
     document.getElementById("city").addEventListener("input", render);
     document.getElementById("categoryFilter").addEventListener("change", render);
-
+    document.getElementById("priceSort").addEventListener("change", render);
+    document.querySelectorAll(
+  "#filterRooms, #filterAreaMin, #filterAreaMax, #filterEmployment, #filterSalaryMin, #filterSalaryMax, #filterPetKind, #filterCondition"
+).forEach(field => {
+  field.addEventListener("input", render);
+  field.addEventListener("change", render);
+});
     const dialog = document.getElementById("listingDialog");
     const form = document.getElementById("listingForm");
+    const listingCategory = form.querySelector('[name="category"]');
+    const categoryFormFields = [...form.querySelectorAll("[data-category-field]")];
 
+    function updateCategoryFormFields() {
+      const selectedCategory = listingCategory.value;
+      const priceCopy = {
+        jobs: ["Зарплата", "Например, 120 000 ₽/мес."],
+        housing: ["Стоимость жилья / аренды", "Например, 35 000 ₽/мес. или 4 500 000 ₽"],
+        pets: ["Стоимость / условия передачи", "Бесплатно или, например, 5 000 ₽"],
+        sales: ["Цена товара", "Например, 12 000 ₽"]
+      }[selectedCategory] || ["Стоимость", "Необязательно"];
+
+      const priceLabel = form.querySelector("#listingPriceLabel");
+      const priceInput = form.querySelector('[name="price"]');
+
+      if (priceLabel) priceLabel.textContent = priceCopy[0];
+      if (priceInput) priceInput.placeholder = priceCopy[1];
+      categoryFormFields.forEach(field => {
+        const isVisible = field.dataset.categoryField === selectedCategory;
+        field.hidden = !isVisible;
+
+        if (!isVisible) {
+          const input = field.querySelector("input, select");
+          if (input) input.value = "";
+        }
+      });
+    }
+
+    listingCategory.addEventListener("change", updateCategoryFormFields);
+    form.addEventListener("reset", () => {
+      setTimeout(updateCategoryFormFields, 0);
+    });
+
+    updateCategoryFormFields();
+    const employmentFilterPicker = document.querySelector(
+  '[data-category-filter="jobs"].vx-category-picker'
+);
+
+if (employmentFilterPicker) {
+  const employmentSelect = employmentFilterPicker.querySelector("#filterEmployment");
+  const employmentTrigger = employmentFilterPicker.querySelector(".vx-category-trigger");
+  const employmentMenu = employmentFilterPicker.querySelector(".vx-category-menu");
+  const employmentOptions = [
+    ...employmentFilterPicker.querySelectorAll(".vx-category-option")
+  ];
+
+  function syncEmploymentFilterPicker() {
+    const selected = employmentOptions.find(
+      option => option.dataset.filterValue === employmentSelect.value
+    );
+
+    if (!selected) return;
+
+    employmentOptions.forEach(option => {
+      option.setAttribute("aria-selected", String(option === selected));
+    });
+
+    employmentTrigger.querySelector(".vx-category-trigger-label").textContent =
+      selected.querySelector(".vx-category-option-copy strong").textContent;
+
+    employmentTrigger.querySelector(".vx-category-trigger-icon").textContent =
+      selected.querySelector(".vx-category-option-icon").textContent.trim();
+  }
+
+  function setEmploymentFilterMenuOpen(open) {
+    employmentMenu.hidden = !open;
+    employmentTrigger.setAttribute("aria-expanded", String(open));
+  }
+
+  employmentTrigger.addEventListener("click", () => {
+    setEmploymentFilterMenuOpen(employmentMenu.hidden);
+  });
+
+  employmentOptions.forEach(option => {
+    option.addEventListener("click", () => {
+      employmentSelect.value = option.dataset.filterValue;
+      syncEmploymentFilterPicker();
+      setEmploymentFilterMenuOpen(false);
+      employmentSelect.dispatchEvent(
+        new Event("change", { bubbles: true })
+      );
+    });
+  });
+
+  document.addEventListener("click", event => {
+    if (!employmentFilterPicker.contains(event.target)) {
+      setEmploymentFilterMenuOpen(false);
+    }
+  });
+
+  document.addEventListener("keydown", event => {
+    if (event.key === "Escape" && !employmentMenu.hidden) {
+      setEmploymentFilterMenuOpen(false);
+      employmentTrigger.focus();
+    }
+  });
+
+  employmentSelect.addEventListener("change", syncEmploymentFilterPicker);
+  syncEmploymentFilterPicker();
+}
+        const categoryPicker = form.querySelector(".vx-category-picker");
+    const categoryTrigger = categoryPicker.querySelector(".vx-category-trigger");
+    const categoryMenu = categoryPicker.querySelector(".vx-category-menu");
+    const categoryOptions = [...categoryPicker.querySelectorAll(".vx-category-option")];
+
+    function syncCategoryPicker() {
+      const selected = categoryOptions.find(
+        option => option.dataset.categoryValue === listingCategory.value
+      );
+      if (!selected) return;
+
+      categoryOptions.forEach(option => {
+        option.setAttribute("aria-selected", String(option === selected));
+      });
+
+      categoryTrigger.querySelector(".vx-category-trigger-icon").textContent =
+        selected.querySelector(".vx-category-option-icon").textContent.trim();
+      categoryTrigger.querySelector(".vx-category-trigger-label").textContent =
+        selected.querySelector(".vx-category-option-copy strong").textContent.trim();
+    }
+
+    function setCategoryMenuOpen(open, restoreFocus = false) {
+      categoryMenu.hidden = !open;
+      categoryPicker.classList.toggle("is-open", open);
+      categoryTrigger.setAttribute("aria-expanded", String(open));
+
+      if (open) {
+        categoryOptions.find(
+          option => option.dataset.categoryValue === listingCategory.value
+        )?.focus();
+      } else if (restoreFocus) {
+        categoryTrigger.focus();
+      }
+    }
+
+    categoryTrigger.addEventListener("click", () => {
+      setCategoryMenuOpen(categoryMenu.hidden);
+    });
+
+    categoryTrigger.addEventListener("keydown", event => {
+      if (event.key === "ArrowDown" || event.key === "ArrowUp") {
+        event.preventDefault();
+        setCategoryMenuOpen(true);
+      }
+    });
+
+    categoryOptions.forEach(option => {
+      option.addEventListener("click", () => {
+        listingCategory.value = option.dataset.categoryValue;
+        listingCategory.dispatchEvent(new Event("change", { bubbles: true }));
+        setCategoryMenuOpen(false, true);
+      });
+    });
+
+    listingCategory.addEventListener("change", syncCategoryPicker);
+
+    categoryMenu.addEventListener("keydown", event => {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        setCategoryMenuOpen(false, true);
+        return;
+      }
+
+      const currentIndex = Math.max(0, categoryOptions.indexOf(document.activeElement));
+      let nextIndex;
+
+      if (event.key === "ArrowDown") {
+        nextIndex = (currentIndex + 1) % categoryOptions.length;
+      } else if (event.key === "ArrowUp") {
+        nextIndex = (currentIndex - 1 + categoryOptions.length) % categoryOptions.length;
+      } else if (event.key === "Home") {
+        nextIndex = 0;
+      } else if (event.key === "End") {
+        nextIndex = categoryOptions.length - 1;
+      } else {
+        return;
+      }
+
+      event.preventDefault();
+      categoryOptions[nextIndex]?.focus();
+    });
+
+    document.addEventListener("click", event => {
+      if (!categoryPicker.contains(event.target)) {
+        setCategoryMenuOpen(false);
+      }
+    });
+
+    form.addEventListener("reset", () => {
+      setTimeout(syncCategoryPicker, 0);
+    });
+
+    syncCategoryPicker();
     document.getElementById("openDialog").addEventListener("click", () => dialog.showModal());
     document.getElementById("closeDialog").addEventListener("click", () => dialog.close());
     document.getElementById("cancelDialog").addEventListener("click", () => dialog.close());
