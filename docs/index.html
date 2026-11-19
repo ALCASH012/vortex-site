@@ -779,9 +779,14 @@ dialog form { color: var(--ink); }
             <option value="sales">Продажи</option>
 </select>
         </label>
-        <label class="field" data-category-filter="housing" style="display:none">
-  <span>Комнаты</span>
-  <select id="filterRooms">
+        <div class="field vx-category-picker"
+     data-category-filter="housing"
+     style="display:none">
+  <span id="filterRoomsLabel">Комнаты</span>
+
+  <select id="filterRooms"
+          class="vx-category-native"
+          aria-labelledby="filterRoomsLabel">
     <option value="">Любое число</option>
     <option value="studio">Студия</option>
     <option value="1">1 комната</option>
@@ -789,7 +794,67 @@ dialog form { color: var(--ink); }
     <option value="3">3 комнаты</option>
     <option value="4+">4 и больше</option>
   </select>
-</label>
+
+  <button class="vx-category-trigger" type="button"
+          aria-haspopup="listbox"
+          aria-expanded="false"
+          aria-controls="filterRoomsMenu">
+    <span class="vx-category-trigger-icon" aria-hidden="true">🏠</span>
+    <span class="vx-category-trigger-label">Любое число</span>
+    <span class="vx-category-trigger-chevron" aria-hidden="true">⌄</span>
+  </button>
+
+  <div class="vx-category-menu" id="filterRoomsMenu"
+       role="listbox" aria-labelledby="filterRoomsLabel" hidden>
+    <button class="vx-category-option" type="button" role="option"
+            data-filter-value="" aria-selected="true">
+      <span class="vx-category-option-icon" aria-hidden="true">✨</span>
+      <span class="vx-category-option-copy">
+        <strong>Любое число</strong><small>Без ограничения</small>
+      </span>
+    </button>
+
+    <button class="vx-category-option" type="button" role="option"
+            data-filter-value="studio" aria-selected="false">
+      <span class="vx-category-option-icon" aria-hidden="true">🛋️</span>
+      <span class="vx-category-option-copy">
+        <strong>Студия</strong><small>Квартира-студия</small>
+      </span>
+    </button>
+
+    <button class="vx-category-option" type="button" role="option"
+            data-filter-value="1" aria-selected="false">
+      <span class="vx-category-option-icon" aria-hidden="true">🚪</span>
+      <span class="vx-category-option-copy">
+        <strong>1 комната</strong><small>Однокомнатное жильё</small>
+      </span>
+    </button>
+
+    <button class="vx-category-option" type="button" role="option"
+            data-filter-value="2" aria-selected="false">
+      <span class="vx-category-option-icon" aria-hidden="true">🛏️</span>
+      <span class="vx-category-option-copy">
+        <strong>2 комнаты</strong><small>Двухкомнатное жильё</small>
+      </span>
+    </button>
+
+    <button class="vx-category-option" type="button" role="option"
+            data-filter-value="3" aria-selected="false">
+      <span class="vx-category-option-icon" aria-hidden="true">🏡</span>
+      <span class="vx-category-option-copy">
+        <strong>3 комнаты</strong><small>Трёхкомнатное жильё</small>
+      </span>
+    </button>
+
+    <button class="vx-category-option" type="button" role="option"
+            data-filter-value="4+" aria-selected="false">
+      <span class="vx-category-option-icon" aria-hidden="true">🏘️</span>
+      <span class="vx-category-option-copy">
+        <strong>4 и больше</strong><small>Просторное жильё</small>
+      </span>
+    </button>
+  </div>
+</div>
 
 <label class="field" data-category-filter="housing" style="display:none">
   <span>Площадь от, м²</span>
@@ -892,9 +957,14 @@ dialog form { color: var(--ink); }
   <input id="filterSalaryMax" type="number" min="0" step="any" placeholder="Без максимума">
 </label>
 
-<label class="field" data-category-filter="pets" style="display:none">
-  <span>Вид животного</span>
-  <select id="filterPetKind">
+<div class="field vx-category-picker"
+     data-category-filter="pets"
+     style="display:none">
+  <span id="filterPetKindLabel">Вид животного</span>
+
+  <select id="filterPetKind"
+          class="vx-category-native"
+          aria-labelledby="filterPetKindLabel">
     <option value="">Любой</option>
     <option value="dog">Собака</option>
     <option value="cat">Кошка</option>
@@ -902,16 +972,117 @@ dialog form { color: var(--ink); }
     <option value="rodent">Грызун</option>
     <option value="other">Другое</option>
   </select>
-</label>
 
-<label class="field" data-category-filter="sales" style="display:none">
-  <span>Состояние</span>
-  <select id="filterCondition">
+  <button class="vx-category-trigger" type="button"
+          aria-haspopup="listbox"
+          aria-expanded="false"
+          aria-controls="filterPetKindMenu">
+    <span class="vx-category-trigger-icon" aria-hidden="true">🐾</span>
+    <span class="vx-category-trigger-label">Любой</span>
+    <span class="vx-category-trigger-chevron" aria-hidden="true">⌄</span>
+  </button>
+
+  <div class="vx-category-menu" id="filterPetKindMenu"
+       role="listbox" aria-labelledby="filterPetKindLabel" hidden>
+    <button class="vx-category-option" type="button" role="option"
+            data-filter-value="" aria-selected="true">
+      <span class="vx-category-option-icon" aria-hidden="true">✨</span>
+      <span class="vx-category-option-copy">
+        <strong>Любой</strong><small>Любой вид животного</small>
+      </span>
+    </button>
+
+    <button class="vx-category-option" type="button" role="option"
+            data-filter-value="dog" aria-selected="false">
+      <span class="vx-category-option-icon" aria-hidden="true">🐕</span>
+      <span class="vx-category-option-copy">
+        <strong>Собака</strong><small>Объявления о собаках</small>
+      </span>
+    </button>
+
+    <button class="vx-category-option" type="button" role="option"
+            data-filter-value="cat" aria-selected="false">
+      <span class="vx-category-option-icon" aria-hidden="true">🐈</span>
+      <span class="vx-category-option-copy">
+        <strong>Кошка</strong><small>Объявления о кошках</small>
+      </span>
+    </button>
+
+    <button class="vx-category-option" type="button" role="option"
+            data-filter-value="bird" aria-selected="false">
+      <span class="vx-category-option-icon" aria-hidden="true">🐦</span>
+      <span class="vx-category-option-copy">
+        <strong>Птица</strong><small>Попугаи и другие птицы</small>
+      </span>
+    </button>
+
+    <button class="vx-category-option" type="button" role="option"
+            data-filter-value="rodent" aria-selected="false">
+      <span class="vx-category-option-icon" aria-hidden="true">🐹</span>
+      <span class="vx-category-option-copy">
+        <strong>Грызун</strong><small>Хомяки и другие грызуны</small>
+      </span>
+    </button>
+
+    <button class="vx-category-option" type="button" role="option"
+            data-filter-value="other" aria-selected="false">
+      <span class="vx-category-option-icon" aria-hidden="true">🐾</span>
+      <span class="vx-category-option-copy">
+        <strong>Другое</strong><small>Другие животные</small>
+      </span>
+    </button>
+  </div>
+</div>
+
+<div class="field vx-category-picker"
+     data-category-filter="sales"
+     style="display:none">
+  <span id="filterConditionLabel">Состояние</span>
+
+  <select id="filterCondition"
+          class="vx-category-native"
+          aria-labelledby="filterConditionLabel">
     <option value="">Любое</option>
     <option value="new">Новое</option>
     <option value="used">Б/у</option>
   </select>
-</label>
+
+  <button class="vx-category-trigger" type="button"
+          aria-haspopup="listbox"
+          aria-expanded="false"
+          aria-controls="filterConditionMenu">
+    <span class="vx-category-trigger-icon" aria-hidden="true">🛍️</span>
+    <span class="vx-category-trigger-label">Любое</span>
+    <span class="vx-category-trigger-chevron" aria-hidden="true">⌄</span>
+  </button>
+
+  <div class="vx-category-menu" id="filterConditionMenu"
+       role="listbox" aria-labelledby="filterConditionLabel" hidden>
+    <button class="vx-category-option" type="button" role="option"
+            data-filter-value="" aria-selected="true">
+      <span class="vx-category-option-icon" aria-hidden="true">✨</span>
+      <span class="vx-category-option-copy">
+        <strong>Любое</strong><small>Без ограничения</small>
+      </span>
+    </button>
+
+    <button class="vx-category-option" type="button" role="option"
+            data-filter-value="new" aria-selected="false">
+      <span class="vx-category-option-icon" aria-hidden="true">✨</span>
+      <span class="vx-category-option-copy">
+        <strong>Новое</strong><small>Новый товар</small>
+      </span>
+    </button>
+
+    <button class="vx-category-option" type="button" role="option"
+            data-filter-value="used" aria-selected="false">
+      <span class="vx-category-option-icon" aria-hidden="true">♻️</span>
+      <span class="vx-category-option-copy">
+        <strong>Б/у</strong><small>Товар уже был в использовании</small>
+      </span>
+    </button>
+  </div>
+</div>
       </div>
     </section>
 
@@ -1473,6 +1644,201 @@ if (employmentFilterPicker) {
 
   employmentSelect.addEventListener("change", syncEmploymentFilterPicker);
   syncEmploymentFilterPicker();
+}
+  const conditionFilterPicker = document.querySelector(
+    '[data-category-filter="sales"].vx-category-picker'
+  );
+
+  if (conditionFilterPicker) {
+    const conditionFilterSelect = conditionFilterPicker.querySelector("#filterCondition");
+    const conditionFilterTrigger = conditionFilterPicker.querySelector(".vx-category-trigger");
+    const conditionFilterMenu = conditionFilterPicker.querySelector(".vx-category-menu");
+    const conditionFilterOptions = [
+      ...conditionFilterPicker.querySelectorAll(".vx-category-option")
+    ];
+
+    function syncConditionFilterPicker() {
+      const selected = conditionFilterOptions.find(
+        option => option.dataset.filterValue === conditionFilterSelect.value
+      );
+
+      if (!selected) return;
+
+      conditionFilterOptions.forEach(option => {
+        option.setAttribute("aria-selected", String(option === selected));
+      });
+
+      const selectedLabel = selected.querySelector(".vx-category-option-copy strong");
+      const triggerLabel = conditionFilterTrigger.querySelector(".vx-category-trigger-label");
+
+      if (selectedLabel && triggerLabel) {
+        triggerLabel.textContent = selectedLabel.textContent;
+      }
+    }
+
+    function setConditionFilterMenuOpen(open) {
+      conditionFilterMenu.hidden = !open;
+      conditionFilterTrigger.setAttribute("aria-expanded", String(open));
+    }
+
+    conditionFilterTrigger.addEventListener("click", () => {
+      setConditionFilterMenuOpen(conditionFilterMenu.hidden);
+    });
+
+    conditionFilterOptions.forEach(option => {
+      option.addEventListener("click", () => {
+        conditionFilterSelect.value = option.dataset.filterValue;
+        syncConditionFilterPicker();
+        setConditionFilterMenuOpen(false);
+        conditionFilterSelect.dispatchEvent(
+          new Event("change", { bubbles: true })
+        );
+      });
+    });
+
+    document.addEventListener("click", event => {
+      if (!conditionFilterPicker.contains(event.target)) {
+        setConditionFilterMenuOpen(false);
+      }
+    });
+
+    document.addEventListener("keydown", event => {
+      if (event.key === "Escape" && !conditionFilterMenu.hidden) {
+        setConditionFilterMenuOpen(false);
+        conditionFilterTrigger.focus();
+      }
+    });
+
+    conditionFilterSelect.addEventListener("change", syncConditionFilterPicker);
+    syncConditionFilterPicker();
+  }
+    const petKindFilterPicker = document.querySelector(
+  '[data-category-filter="pets"].vx-category-picker'
+);
+
+if (petKindFilterPicker) {
+  const petKindSelect = petKindFilterPicker.querySelector("#filterPetKind");
+  const petKindTrigger = petKindFilterPicker.querySelector(".vx-category-trigger");
+  const petKindMenu = petKindFilterPicker.querySelector(".vx-category-menu");
+  const petKindOptions = [
+    ...petKindFilterPicker.querySelectorAll(".vx-category-option")
+  ];
+
+  function syncPetKindFilterPicker() {
+    const selected = petKindOptions.find(
+      option => option.dataset.filterValue === petKindSelect.value
+    );
+
+    if (!selected) return;
+
+    petKindOptions.forEach(option => {
+      option.setAttribute("aria-selected", String(option === selected));
+    });
+
+    petKindTrigger.querySelector(".vx-category-trigger-label").textContent =
+      selected.querySelector(".vx-category-option-copy strong").textContent;
+
+    petKindTrigger.querySelector(".vx-category-trigger-icon").textContent =
+      selected.querySelector(".vx-category-option-icon").textContent.trim();
+  }
+
+  function setPetKindFilterMenuOpen(open) {
+    petKindMenu.hidden = !open;
+    petKindTrigger.setAttribute("aria-expanded", String(open));
+  }
+
+  petKindTrigger.addEventListener("click", () => {
+    setPetKindFilterMenuOpen(petKindMenu.hidden);
+  });
+
+  petKindOptions.forEach(option => {
+    option.addEventListener("click", () => {
+      petKindSelect.value = option.dataset.filterValue;
+      syncPetKindFilterPicker();
+      setPetKindFilterMenuOpen(false);
+      petKindSelect.dispatchEvent(new Event("change", { bubbles: true }));
+    });
+  });
+
+  document.addEventListener("click", event => {
+    if (!petKindFilterPicker.contains(event.target)) {
+      setPetKindFilterMenuOpen(false);
+    }
+  });
+
+  document.addEventListener("keydown", event => {
+    if (event.key === "Escape" && !petKindMenu.hidden) {
+      setPetKindFilterMenuOpen(false);
+      petKindTrigger.focus();
+    }
+  });
+
+  petKindSelect.addEventListener("change", syncPetKindFilterPicker);
+  syncPetKindFilterPicker();
+}
+      const roomsFilterPicker = document.querySelector(
+  '[data-category-filter="housing"].vx-category-picker'
+);
+
+if (roomsFilterPicker) {
+  const roomsSelect = roomsFilterPicker.querySelector("#filterRooms");
+  const roomsTrigger = roomsFilterPicker.querySelector(".vx-category-trigger");
+  const roomsMenu = roomsFilterPicker.querySelector(".vx-category-menu");
+  const roomsOptions = [
+    ...roomsFilterPicker.querySelectorAll(".vx-category-option")
+  ];
+
+  function syncRoomsFilterPicker() {
+    const selected = roomsOptions.find(
+      option => option.dataset.filterValue === roomsSelect.value
+    );
+
+    if (!selected) return;
+
+    roomsOptions.forEach(option => {
+      option.setAttribute("aria-selected", String(option === selected));
+    });
+
+    roomsTrigger.querySelector(".vx-category-trigger-label").textContent =
+      selected.querySelector(".vx-category-option-copy strong").textContent;
+
+    roomsTrigger.querySelector(".vx-category-trigger-icon").textContent =
+      selected.querySelector(".vx-category-option-icon").textContent.trim();
+  }
+
+  function setRoomsFilterMenuOpen(open) {
+    roomsMenu.hidden = !open;
+    roomsTrigger.setAttribute("aria-expanded", String(open));
+  }
+
+  roomsTrigger.addEventListener("click", () => {
+    setRoomsFilterMenuOpen(roomsMenu.hidden);
+  });
+
+  roomsOptions.forEach(option => {
+    option.addEventListener("click", () => {
+      roomsSelect.value = option.dataset.filterValue;
+      syncRoomsFilterPicker();
+      setRoomsFilterMenuOpen(false);
+      roomsSelect.dispatchEvent(new Event("change", { bubbles: true }));
+    });
+  });
+
+  document.addEventListener("click", event => {
+    if (!roomsFilterPicker.contains(event.target)) {
+      setRoomsFilterMenuOpen(false);
+    }
+  });
+
+  document.addEventListener("keydown", event => {
+    if (event.key === "Escape" && !roomsMenu.hidden) {
+      setRoomsFilterMenuOpen(false);
+      roomsTrigger.focus();
+    }
+  });
+
+  roomsSelect.addEventListener("change", syncRoomsFilterPicker);
+  syncRoomsFilterPicker();
 }
         const categoryPicker = form.querySelector(".vx-category-picker");
     const categoryTrigger = categoryPicker.querySelector(".vx-category-trigger");
