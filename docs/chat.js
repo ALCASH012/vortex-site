@@ -14,6 +14,72 @@
   let pendingListing = null;
   let activeConversation = null;
   let realtimeChannel = null;
+  let notificationChannel = null;
+let notificationChannelUserId = null;
+
+  function notificationsAreEnabled() {
+    if (typeof window.Notification === "undefined") return false;
+    try {
+      const raw = localStorage.getItem("vortex-settings-v2")
+        || localStorage.getItem("vortex-settings-v1")
+        || "{}";
+      const saved = JSON.parse(raw);
+      return saved.notifications === true
+        && window.Notification.permission === "granted";
+    } catch {
+      return false;
+    }
+  }
+
+  function stopNotificationChannel() {
+    if (notificationChannel) {
+      void client.removeChannel(notificationChannel);
+    }
+    notificationChannel = null;
+        notificationChannelUserId = null;
+  }
+
+  function startNotificationChannel(userId) {
+    if (!userId || !notificationsAreEnabled()) {
+      stopNotificationChannel();
+      return;
+    }
+    if (notificationChannel && notificationChannelUserId === userId) return;
+
+    stopNotificationChannel();
+    notificationChannelUserId = userId;
+    notificationChannel = client
+      .channel("vx-notifications-" + userId)
+      .on("postgres_changes", {
+        event: "INSERT",
+        schema: "public",
+        table: "messages"
+      }, payload => {
+        const message = payload.new;
+        if (!message || message.sender_id === userId) return;
+        if (!notificationsAreEnabled()) {
+          stopNotificationChannel();
+          return;
+        }
+
+        const conversation = conversationCache.get(message.conversation_id);
+        const title = conversation?.listingTitle
+          ? "Новое сообщение · " + conversation.listingTitle
+          : "Новое сообщение в Вортекс";
+        const body = String(message.body || "").trim().slice(0, 180)
+          || "Откройте Вортекс, чтобы прочитать сообщение.";
+
+        try {
+          new window.Notification(title, {
+            body,
+            tag: "vortex-message-" + message.id
+          });
+        } catch (error) {
+          console.warn("Не удалось показать уведомление ВОРТЕКС:", error);
+        }
+      })
+      .subscribe();
+  }
   const conversationCache = new Map();
   const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
@@ -452,7 +518,7 @@
         currentSession.user.email || "Аккаунт ВОРТЕКС";
       updateCardButtons();
       updateListingNotice();
-
+      startNotificationChannel(currentSession.user.id);
       if (pendingListing) {
         const queued = pendingListing;
         pendingListing = null;
@@ -461,6 +527,7 @@
         loadInbox();
       }
     } else {
+            stopNotificationChannel();
       stopRealtime();
       chatDialog.classList.remove("vx-chat-thread-open");
       activeConversation = null;
@@ -1142,9 +1209,18 @@ condition: get("category") === "sales" ? (get("condition") || null) : null
     }, true);
   }
 
+    window.addEventListener("vortex:notifications-changed", event => {
+    if (event.detail?.enabled === true && currentSession?.user?.id) {
+      startNotificationChannel(currentSession.user.id);
+    } else {
+      stopNotificationChannel();
+    }
+  });
+
   client.auth.onAuthStateChange((_event, session) => {
     window.setTimeout(() => applySession(session), 0);
   });
+
 
   client.auth.getSession().then(({ data, error }) => {
     if (error) {

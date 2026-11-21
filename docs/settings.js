@@ -285,7 +285,26 @@
   mobileNav?.querySelector('[data-vortex-action="settings"]')
     ?.addEventListener("click", openSettings);
 
-  $("vx-save").addEventListener("click", () => {
+  $("vx-save").addEventListener("click", async () => {
+        let notificationsEnabled = $("vx-notifications").checked;
+    if (notificationsEnabled) {
+      if (typeof window.Notification === "undefined") {
+        notificationsEnabled = false;
+      } else if (window.Notification.permission === "default") {
+        try {
+          notificationsEnabled =
+            await window.Notification.requestPermission() === "granted";
+        } catch {
+          notificationsEnabled = false;
+        }
+      } else {
+        notificationsEnabled = window.Notification.permission === "granted";
+      }
+      if (!notificationsEnabled) {
+        $("vx-notifications").checked = false;
+        alert("Системные уведомления не разрешены. Проверьте разрешение сайта в настройках браузера.");
+      }
+    }
     settings = {
       city: $("vx-city").value.trim(),
       category: $("vx-category").value,
@@ -293,7 +312,7 @@
       layout: $("vx-layout").value,
       density: $("vx-density").value,
       reduceMotion: $("vx-motion").checked,
-      notifications: $("vx-notifications").checked
+      notifications: notificationsEnabled
     };
 
     try {
@@ -306,6 +325,9 @@
     applySettings();
     applyFilters(true);
     dialog.close();
+        window.dispatchEvent(new CustomEvent("vortex:notifications-changed", {
+      detail: { enabled: settings.notifications }
+    }));
   });
 
   $("vx-reset").addEventListener("click", () => {
@@ -319,6 +341,9 @@
     applySettings();
     applyFilters(true);
     dialog.close();
+        window.dispatchEvent(new CustomEvent("vortex:notifications-changed", {
+      detail: { enabled: settings.notifications }
+    }));
   });
 
   $("vx-clear").addEventListener("click", () => {
