@@ -138,7 +138,8 @@ let notificationChannelUserId = null;
     .vx-chat-list-head { margin-bottom:8px; }
     .vx-chat-list-head h3,.vx-chat-thread h3 { margin:8px 0; font-size:16px; }
     .vx-chat-conversation {
-      display:block; width:100%; margin:7px 0; padding:12px;
+           display:flex; align-items:center; justify-content:space-between; gap:10px;
+      width:100%; margin:7px 0; padding:12px;
       border:1px solid #ffffff20; border-radius:12px;
       color:inherit; background:#ffffff09; text-align:left;
       white-space:pre-line; font:inherit; font-size:12px;
@@ -154,6 +155,13 @@ let notificationChannelUserId = null;
       min-width: 0;
       width: auto;
       margin: 0;
+    }
+        .vx-chat-conversation-text { flex:1; min-width:0; }
+    .vx-chat-unread-badge {
+      flex:none; min-width:22px; height:22px; padding:0 6px;
+      display:inline-flex; align-items:center; justify-content:center;
+      border-radius:999px; color:#17191b; background:#f0e3c9;
+      font-size:11px; font-weight:800; line-height:1;
     }
     .vx-chat-hide-conversation {
       flex: none;
@@ -543,7 +551,7 @@ let notificationChannelUserId = null;
 
     const { data, error } = await client
       .from("conversations")
-      .select("id,listing_id,buyer_id,seller_id,last_message_at")
+      .select("id,listing_id,buyer_id,seller_id,last_message_at,created_at")
       .order("last_message_at", { ascending: false })
       .limit(100);
 
@@ -581,7 +589,78 @@ let notificationChannelUserId = null;
         && lastMessageAt > hiddenAt;
     });
     conversationCache.clear();
+    const unreadCounts = new Map();
+    if (conversations.length) {
+      const userId = currentSession.user.id;
+      const conversationIds = conversations.map(item => item.id);
+      const { data: readRows, error: readError } = await client
+        .from("conversation_reads")
+        .select("conversation_id,last_read_at")
+        .eq("user_id", userId)
+        .in("conversation_id", conversationIds);
+      if (readError) {
+        setStatus("Не удалось загрузить отметки прочтения: " + readError.message);
+        return;
+      }
 
+      const savedReadAt = new Map(
+        (Array.isArray(readRows) ? readRows : []).map(item => [
+          item.conversation_id,
+          item.last_read_at
+        ])
+      );
+      const readAtByConversation = new Map(
+        conversations.map(conversation => {
+          const readAt = Date.parse(
+            savedReadAt.get(conversation.id)
+              || conversation.created_at
+              || "1970-01-01T00:00:00.000Z"
+          );
+          return [
+            conversation.id,
+            Number.isFinite(readAt) ? readAt : 0
+          ];
+        })
+      );
+
+      const earliestReadAt = Math.min(...readAtByConversation.values());
+      const earliestReadIso = new Date(earliestReadAt).toISOString();
+      const pageSize = 1000;
+      let offset = 0;
+
+      while (true) {
+        const { data: messageRows, error: messagesError } = await client
+          .from("messages")
+          .select("conversation_id,created_at")
+          .in("conversation_id", conversationIds)
+          .neq("sender_id", userId)
+          .gt("created_at", earliestReadIso)
+          .order("created_at", { ascending: true })
+          .range(offset, offset + pageSize - 1);
+
+        if (messagesError) {
+          setStatus(
+            "Не удалось проверить непрочитанные сообщения: " + messagesError.message
+          );
+          return;
+        }
+
+        const page = Array.isArray(messageRows) ? messageRows : [];
+        page.forEach(message => {
+          const messageAt = Date.parse(message.created_at || "");
+          const readAt = readAtByConversation.get(message.conversation_id) ?? 0;
+          if (Number.isFinite(messageAt) && messageAt > readAt) {
+            unreadCounts.set(
+              message.conversation_id,
+              (unreadCounts.get(message.conversation_id) || 0) + 1
+            );
+          }
+        });
+
+        if (page.length < pageSize) break;
+        offset += pageSize;
+      }
+    }
     const listingIds = [...new Set(conversations.map(item => item.listing_id).filter(Boolean))];
     const listingDetails = new Map();
 
@@ -636,7 +715,22 @@ let notificationChannelUserId = null;
           })
         : "";
 
-      button.textContent = `${title}\n${role}${date ? " · " + date : ""}`;
+            const conversationText = document.createElement("span");
+      conversationText.className = "vx-chat-conversation-text";
+      conversationText.textContent = `${title}\n${role}${date ? " · " + date : ""}`;
+      button.append(conversationText);
+
+      const unreadCount = unreadCounts.get(conversation.id) || 0;
+      if (unreadCount > 0) {
+        const badge = document.createElement("span");
+        badge.className = "vx-chat-unread-badge";
+        badge.textContent = unreadCount > 99 ? "99+" : String(unreadCount);
+        badge.setAttribute(
+          "aria-label",
+          `${unreadCount} непрочитанных сообщений`
+        );
+        button.append(badge);
+      }
       button.addEventListener("click", () => openThread(conversation));
             row.append(button);
 
@@ -799,6 +893,27 @@ let notificationChannelUserId = null;
     });
 
     messagesBox.scrollTop = messagesBox.scrollHeight;
+        const latestMessage = messages[messages.length - 1];
+    const userId = currentSession?.user?.id;
+    if (
+      userId
+      && latestMessage?.created_at
+      && activeConversation?.id === conversationId
+    ) {
+      const { error: readError } = await client
+        .from("conversation_reads")
+        .upsert({
+          user_id: userId,
+          conversation_id: conversationId,
+          last_read_at: latestMessage.created_at
+        }, { onConflict: "user_id,conversation_id" });
+
+      if (readError) {
+        setStatus(
+          "Не удалось обновить отметку прочтения: " + readError.message
+        );
+      }
+    }
   }
 
   function openThread(conversation) {
