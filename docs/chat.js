@@ -1135,17 +1135,26 @@ let notificationChannelUserId = null;
     if (sendButton.disabled) return;
     sendButton.disabled = true;
 
-    const { error } = await client.from("messages").insert({
-      conversation_id: activeConversation.id,
-      sender_id: currentSession.user.id,
-      body
-    });
-
+      const { data: sentMessages, error } = await client
+      .from("messages")
+      .insert({
+        conversation_id: activeConversation.id,
+        sender_id: currentSession.user.id,
+        body
+      })
+      .select("id");
     sendButton.disabled = false;
 
     if (error) {
       setStatus("Не удалось отправить сообщение: " + error.message);
       return;
+    }
+
+    const sentId = Array.isArray(sentMessages) ? sentMessages[0]?.id : null;
+    if (sentId && window.VORTEX_PUSH?.notifyMessage) {
+      Promise.resolve(window.VORTEX_PUSH.notifyMessage(sentId)).catch(pushError => {
+        console.warn("Push не отправлен:", pushError?.message || pushError);
+      });
     }
 
     messageInput.value = "";
