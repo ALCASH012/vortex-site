@@ -1,0 +1,94 @@
+.vx-highlights {
+    #listingDialog .dialog-fields > * {
+  min-width: 0;
+}
+
+#listingDialog input,
+#listingDialog select,
+#listingDialog textarea {
+  box-sizing: border-box;
+}
+  grid-column: 1 / -1;
+  min-width: 0;
+  margin: 0;
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+}
+
+.vx-highlights legend {
+  padding: 0 6px;
+  font-weight: 750;
+}
+
+.vx-highlights-note {
+  margin: 0 0 10px;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.vx-highlights-options {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.vx-highlight-option {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  min-width: 0;
+  padding: 9px 10px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 13px;
+  line-height: 1.35;
+}
+
+.vx-highlight-option input[type="checkbox"] {
+  box-sizing: border-box;
+  flex: 0 0 16px;
+  width: 16px;
+  height: 16px;
+  min-width: 16px;
+  padding: 0;
+  margin: 2px 0 0;
+  accent-color: var(--green);
+}
+
+.vx-highlight-option span {
+  display: block;
+}
+
+.vx-card-highlights {
+  margin: 0 0 16px;
+}
+
+.vx-card-highlights > strong {
+  display: block;
+  margin: 0 0 8px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.vx-card-highlights-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.vx-highlight-badge {
+  display: inline-flex;
+  align-items: center;
+  max-width: 100%;
+  padding: 5px 9px;
+  border: 1px solid rgba(21, 94, 75, 0.22);
+  border-radius: 999px;
+  background: rgba(21, 94, 75, 0.09);
+  color: var(--green);
+  font-size: 12px;
+  line-height: 1.3;
+  overflow-wrap: anywhere;
+}

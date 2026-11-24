@@ -1266,6 +1266,7 @@ let notificationChannelUserId = null;
           description: get("description"),
           price: get("price"),
           contact: get("contact"),
+          highlights: data.getAll("highlights"),
 rooms: get("category") === "housing" ? (get("rooms") || null) : null,
 area_sqm: get("category") === "housing" && get("area_sqm") !== ""
   ? Number(get("area_sqm"))

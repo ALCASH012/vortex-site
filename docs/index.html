@@ -681,6 +681,7 @@ dialog form { color: var(--ink); }
   <link rel="stylesheet" href="./listing-image.css?v=3">
   <link rel="stylesheet" href="./sales.css?v=2">
   <link rel="stylesheet" href="./chat-theme.css?v=8">
+  <link rel="stylesheet" href="./highlights.css?v=1">
 </head>
 <style>
 #filterRooms option,
@@ -1236,7 +1237,7 @@ dialog form { color: var(--ink); }
           </select>
         </label>
 
-        <label class="field vx-category-field" data-category-field="sales" hidden>
+                <label class="field vx-category-field" data-category-field="sales" hidden>
           <span>Состояние товара</span>
           <select name="condition">
             <option value="">Не указано</option>
@@ -1244,14 +1245,63 @@ dialog form { color: var(--ink); }
             <option value="used">Б/у</option>
           </select>
         </label>
-<label class="field">
-  <span>Контакт</span>
+
+        <fieldset class="vx-highlights vx-category-field"
+                  data-category-field="jobs" hidden>
+          <legend>Важное сразу</legend>
+          <p class="vx-highlights-note">Отметьте подходящие пункты. Условия указаны автором и не проверяются Вортексом.</p>
+          <div class="vx-highlights-options">
+            <label class="vx-highlight-option"><input type="checkbox" name="highlights" value="Медкнижка не нужна"><span>Медкнижка не нужна</span></label>
+            <label class="vx-highlight-option"><input type="checkbox" name="highlights" value="Поможем с оформлением документов"><span>Поможем с оформлением документов</span></label>
+            <label class="vx-highlight-option"><input type="checkbox" name="highlights" value="Можно без опыта"><span>Можно без опыта</span></label>
+            <label class="vx-highlight-option"><input type="checkbox" name="highlights" value="Обучение на месте"><span>Обучение на месте</span></label>
+          </div>
+        </fieldset>
+
+        <fieldset class="vx-highlights vx-category-field"
+                  data-category-field="housing" hidden>
+          <legend>Важное сразу</legend>
+          <p class="vx-highlights-note">Отметьте подходящие пункты. Условия указаны автором и не проверяются Вортексом.</p>
+          <div class="vx-highlights-options">
+            <label class="vx-highlight-option"><input type="checkbox" name="highlights" value="Без комиссии"><span>Без комиссии</span></label>
+            <label class="vx-highlight-option"><input type="checkbox" name="highlights" value="Залог не нужен"><span>Залог не нужен</span></label>
+            <label class="vx-highlight-option"><input type="checkbox" name="highlights" value="Коммунальные включены"><span>Коммунальные включены</span></label>
+            <label class="vx-highlight-option"><input type="checkbox" name="highlights" value="Можно с детьми"><span>Можно с детьми</span></label>
+            <label class="vx-highlight-option"><input type="checkbox" name="highlights" value="Можно с животными"><span>Можно с животными</span></label>
+          </div>
+        </fieldset>
+
+        <fieldset class="vx-highlights vx-category-field"
+                  data-category-field="pets" hidden>
+          <legend>Важное сразу</legend>
+          <p class="vx-highlights-note">Отметьте подходящие пункты. Условия указаны автором и не проверяются Вортексом.</p>
+          <div class="vx-highlights-options">
+            <label class="vx-highlight-option"><input type="checkbox" name="highlights" value="Есть ветпаспорт"><span>Есть ветпаспорт</span></label>
+            <label class="vx-highlight-option"><input type="checkbox" name="highlights" value="Привит"><span>Привит</span></label>
+            <label class="vx-highlight-option"><input type="checkbox" name="highlights" value="Обработан от паразитов"><span>Обработан от паразитов</span></label>
+            <label class="vx-highlight-option"><input type="checkbox" name="highlights" value="Знаком с детьми"><span>Знаком с детьми</span></label>
+            <label class="vx-highlight-option"><input type="checkbox" name="highlights" value="Стерилизован / кастрирован"><span>Стерилизован / кастрирован</span></label>
+          </div>
+        </fieldset>
+
+        <fieldset class="vx-highlights vx-category-field"
+                  data-category-field="sales" hidden>
+          <legend>Важное сразу</legend>
+          <p class="vx-highlights-note">Отметьте подходящие пункты. Условия указаны автором и не проверяются Вортексом.</p>
+          <div class="vx-highlights-options">
+            <label class="vx-highlight-option"><input type="checkbox" name="highlights" value="Торг уместен"><span>Торг уместен</span></label>
+            <label class="vx-highlight-option"><input type="checkbox" name="highlights" value="Доставка возможна"><span>Доставка возможна</span></label>
+            <label class="vx-highlight-option"><input type="checkbox" name="highlights" value="Можно проверить перед покупкой"><span>Можно проверить перед покупкой</span></label>
+            <label class="vx-highlight-option"><input type="checkbox" name="highlights" value="Есть чек / документы"><span>Есть чек / документы</span></label>
+            <label class="vx-highlight-option"><input type="checkbox" name="highlights" value="Комплект полный"><span>Комплект полный</span></label>
+          </div>
+        </fieldset>
+
         <label class="field">
           <span>Контакт</span>
           <input name="contact" required maxlength="120" placeholder="email@example.com">
         </label>
       </div>
-
       
       <div class="vx-image-area">
         <label class="vx-image-field">
@@ -1409,7 +1459,15 @@ dialog form { color: var(--ink); }
       const contact = href
         ? `<a class="contact-link" href="${escapeHTML(href)}">Связаться →</a>`
         : `<span class="muted">${escapeHTML(item.contact || "Контакт не указан")}</span>`;
-
+      const highlightsMarkup = Array.isArray(item.highlights)
+        ? item.highlights
+            .filter(value => typeof value === "string" && value.trim())
+            .map(value => `<span class="vx-highlight-badge">${escapeHTML(value)}</span>`)
+            .join("")
+        : "";
+      const highlightsBlock = highlightsMarkup
+        ? `<div class="vx-card-highlights"><strong>Важное сразу</strong><div class="vx-card-highlights-list">${highlightsMarkup}</div></div>`
+        : "";
       return `
         <article class="card${item.image ? " has-custom-image" : ""}"${item.id ? ` data-vx-listing-id="${escapeHTML(item.id)}" data-vx-owner-id="${escapeHTML(item.ownerId || "")}"` : ""}>
           ${item.image ? '<img class="card-image" src="' + escapeHTML(item.image) + '" alt="" loading="lazy" decoding="async">' : ""}
@@ -1419,6 +1477,7 @@ dialog form { color: var(--ink); }
           </div>
           <h3>${escapeHTML(item.title || "Без заголовка")}</h3>
           <p class="description">${escapeHTML(item.description || "")}</p>
+                    ${highlightsBlock}
           <div class="card-bottom">
             <span class="price">${escapeHTML(item.price || "")}</span>
             ${contact}
@@ -1566,8 +1625,11 @@ const filtered = listings.filter(item => {
         const isVisible = field.dataset.categoryField === selectedCategory;
         field.hidden = !isVisible;
 
-        if (!isVisible) {
-          const input = field.querySelector("input, select");
+                if (!isVisible) {
+          field.querySelectorAll('input[type="checkbox"]').forEach(input => {
+            input.checked = false;
+          });
+          const input = field.querySelector('input:not([type="checkbox"]), select');
           if (input) input.value = "";
         }
       });
@@ -1978,6 +2040,7 @@ if (roomsFilterPicker) {
         description: get("description"),
         price: get("price"),
         contact: get("contact"),
+                highlights: data.getAll("highlights"),
         image: get("image"),
         planAtCreation,
         createdAt,
@@ -2080,9 +2143,9 @@ if (roomsFilterPicker) {
   <script src="./usual-tools.js?v=1" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
   <script src="./supabase-config.js?v=2" defer></script>
-  <script src="./supabase-read.js?v=3" defer></script>
+  <script src="./supabase-read.js?v=4" defer></script>
   <script src="./profile-cloud.js?v=2" defer></script>
-  <script src="./chat.js?v=8" defer></script>
+  <script src="./chat.js?v=9" defer></script>
   <script src="./calls.js?v=2" defer></script>
   <script src="./listing-details.js?v=1" defer></script>
   <script src="./push.js?v=1" defer></script>
