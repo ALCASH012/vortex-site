@@ -15,6 +15,11 @@
     <h2 id="vx-detail-title" data-title></h2>
     <p class="vx-detail-price" data-price></p>
     <p class="vx-detail-description" data-description></p>
+        <section class="vx-detail-highlights" data-highlights hidden>
+      <h3>Важное сразу</h3>
+      <ul data-highlights-list></ul>
+      <p class="vx-detail-highlights-note">Условия указаны автором и не проверяются Вортексом.</p>
+    </section>
     <p class="vx-detail-dates" data-dates></p>
     <div class="vx-detail-contact" data-contact></div>
     <div class="vx-detail-actions" data-actions hidden>
@@ -37,6 +42,37 @@
     .vx-detail-title{margin:8px 40px 10px 0}
     .vx-detail-price{font-size:20px;font-weight:800}
     .vx-detail-description{white-space:pre-wrap;line-height:1.6}
+        .vx-detail-highlights {
+      margin: 18px 0;
+      padding: 14px 16px;
+      border: 1px solid #3a4656;
+      border-radius: 12px;
+      background: #1d2a3a;
+    }
+    .vx-detail-highlights[hidden] {
+      display: none !important;
+    }
+    .vx-detail-highlights h3 {
+      margin: 0 0 10px;
+      color: #f4f6fa;
+      font-size: 16px;
+    }
+    .vx-detail-highlights ul {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px 20px;
+      margin: 0;
+      padding-left: 20px;
+    }
+    .vx-detail-highlights li {
+      color: #f4f6fa;
+      line-height: 1.45;
+    }
+    .vx-detail-highlights-note {
+      margin: 12px 0 0;
+      color: #c0cad8 !important;
+      font-size: 12px;
+    }
     .vx-detail-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:16px}
     .vx-detail-actions button,.vx-detail-contact button{border:0;border-radius:10px;padding:10px 14px;font:inherit;font-weight:700;cursor:pointer;background:#315efb;color:#fff}
     .vx-detail-actions [data-delete]{background:#b42318}
@@ -98,9 +134,37 @@
     ].filter(Boolean).join(" · ");
     $("[data-price]").textContent =
       card.querySelector(".price")?.textContent.trim() || "Цена не указана";
+        const fullDescription = card.dataset.vxDescription;
     $("[data-description]").textContent =
-      card.querySelector(".description")?.textContent.trim() || "Описание не указано.";
+      typeof fullDescription === "string"
+        ? fullDescription || "Описание не указано."
+        : card.querySelector(".description")?.textContent.trim() || "Описание не указано.";
+    const highlightsSection = $("[data-highlights]");
+    const highlightsList = $("[data-highlights-list]");
+    let highlights = Array.isArray(item?.highlights) ? item.highlights : [];
 
+    if (!highlights.length && card.dataset.vxHighlights) {
+      try {
+        const cardHighlights = JSON.parse(card.dataset.vxHighlights);
+        if (Array.isArray(cardHighlights)) highlights = cardHighlights;
+      } catch {
+        highlights = [];
+      }
+    }
+
+    highlights = highlights
+      .filter(value => typeof value === "string" && value.trim())
+      .map(value => value.trim());
+
+    if (highlightsSection && highlightsList) {
+      highlightsList.replaceChildren();
+      highlights.forEach(value => {
+        const li = document.createElement("li");
+        li.textContent = value;
+        highlightsList.append(li);
+      });
+      highlightsSection.hidden = highlights.length === 0;
+    }
     const dates = [];
     if (item?.createdAt) dates.push(`Опубликовано: ${formatDate(item.createdAt)}`);
     if (item?.expiresAt) dates.push(`Срок до: ${formatDate(item.expiresAt)}`);

@@ -1459,24 +1459,37 @@ dialog form { color: var(--ink); }
       const contact = href
         ? `<a class="contact-link" href="${escapeHTML(href)}">Связаться →</a>`
         : `<span class="muted">${escapeHTML(item.contact || "Контакт не указан")}</span>`;
-      const highlightsMarkup = Array.isArray(item.highlights)
+              const descriptionText = String(item.description || "");
+      const descriptionChars = Array.from(descriptionText);
+      const cardDescription = descriptionChars.length > 35
+        ? `${descriptionChars.slice(0, 32).join("")}...`
+        : descriptionText;
+           const highlightValues = Array.isArray(item.highlights)
         ? item.highlights
             .filter(value => typeof value === "string" && value.trim())
-            .map(value => `<span class="vx-highlight-badge">${escapeHTML(value)}</span>`)
-            .join("")
-        : "";
-      const highlightsBlock = highlightsMarkup
-        ? `<div class="vx-card-highlights"><strong>Важное сразу</strong><div class="vx-card-highlights-list">${highlightsMarkup}</div></div>`
+            .map(value => value.trim())
+        : [];
+      const highlightCount = highlightValues.length;
+      const lastTwo = highlightCount % 100;
+      const highlightUnit = lastTwo >= 11 && lastTwo <= 14
+        ? "пунктов"
+        : highlightCount % 10 === 1
+          ? "пункт"
+          : highlightCount % 10 >= 2 && highlightCount % 10 <= 4
+            ? "пункта"
+            : "пунктов";
+      const highlightsBlock = highlightCount
+        ? `<div class="vx-card-highlights"><strong>Важное сразу</strong><div class="vx-card-highlights-list"><span class="vx-highlight-badge">${highlightCount} ${highlightUnit}</span></div></div>`
         : "";
       return `
-        <article class="card${item.image ? " has-custom-image" : ""}"${item.id ? ` data-vx-listing-id="${escapeHTML(item.id)}" data-vx-owner-id="${escapeHTML(item.ownerId || "")}"` : ""}>
+                <article class="card${item.image ? " has-custom-image" : ""}"${item.id ? ` data-vx-listing-id="${escapeHTML(item.id)}" data-vx-owner-id="${escapeHTML(item.ownerId || "")}"` : ""} data-vx-highlights="${escapeHTML(JSON.stringify(highlightValues))}" data-vx-description="${escapeHTML(descriptionText)}">
           ${item.image ? '<img class="card-image" src="' + escapeHTML(item.image) + '" alt="" loading="lazy" decoding="async">' : ""}
           <div class="card-top">
             <span class="tag tag-${category}">${escapeHTML(label)}</span>
             <span class="location">${escapeHTML(item.location || "")}</span>
           </div>
           <h3>${escapeHTML(item.title || "Без заголовка")}</h3>
-          <p class="description">${escapeHTML(item.description || "")}</p>
+          <p class="description">${escapeHTML(cardDescription)}</p>
                     ${highlightsBlock}
           <div class="card-bottom">
             <span class="price">${escapeHTML(item.price || "")}</span>
@@ -2147,7 +2160,7 @@ if (roomsFilterPicker) {
   <script src="./profile-cloud.js?v=2" defer></script>
   <script src="./chat.js?v=9" defer></script>
   <script src="./calls.js?v=2" defer></script>
-  <script src="./listing-details.js?v=1" defer></script>
+  <script src="./listing-details.js?v=2" defer></script>
   <script src="./push.js?v=1" defer></script>
 </body>
 </html>
