@@ -33,7 +33,7 @@
 
   const style = document.createElement("style");
   style.textContent = `
-    .vx-listing-detail{position:relative;box-sizing:border-box;width:min(720px,90vw);max-height:88vh;overflow:auto;border:0;border-radius:18px;padding:26px;background:#fff;color:#172033;box-shadow:0 20px 70px #0005}
+    .vx-listing-detail{position:fixed;inset:auto;top:50%;left:50%;transform:translate(-50%,-50%);margin:0;box-sizing:border-box;width:min(720px,90vw);max-height:88vh;overflow:auto;border:0;border-radius:18px;padding:26px;background:#fff;color:#172033;box-shadow:0 20px 70px #0005}
     .vx-listing-detail::backdrop{background:#101828aa}
     .vx-detail-close{position:absolute;right:12px;top:10px;border:0;background:transparent;font-size:28px;cursor:pointer}
     .vx-detail-image{display:block;width:100%;max-height:360px;object-fit:cover;border-radius:12px}
