@@ -9,7 +9,6 @@
 
   const FAVORITES_KEY = "vortex-favorites-v1";
   const PLAN_KEY = "vortex-subscription-demo-v1";
-  const PAID_PLANS = new Set(["econom", "deluxe", "premium"]);
   const CATEGORY_NAMES = {
     jobs: "Работа",
     housing: "Жильё",
@@ -17,6 +16,7 @@
     other: "Объявление"
   };
   const PLAN_NAMES = {
+    usual: "Обычная",
     econom: "Эконом",
     deluxe: "Делюкс",
     premium: "Премиум"
@@ -34,7 +34,7 @@
   }
 
   function hasFavoritesAccess() {
-    return PAID_PLANS.has(getSelectedPlan());
+    return true;
   }
 
   function escapeHTML(value) {
@@ -365,17 +365,11 @@
 
   function updateFavoriteStatus() {
     const plan = getSelectedPlan();
-    const active = PAID_PLANS.has(plan);
-
-    if (active) {
-      favoritesStatus.textContent =
-        `Демо-тариф «${PLAN_NAMES[plan]}» выбран. Можно добавлять объявления в избранное.`;
-      choosePlanButton.hidden = true;
-    } else {
-      favoritesStatus.textContent =
-        "Чтобы добавлять объявления в избранное, выберите тариф «Эконом», «Делюкс» или «Премиум».";
-      choosePlanButton.hidden = false;
-    }
+    const planName = PLAN_NAMES[plan];
+    favoritesStatus.textContent = planName
+      ? `Демо-тариф «${planName}» выбран. Избранное доступно на всех тарифах.`
+      : "Избранное доступно на всех тарифах, включая «Обычную» версию.";
+    choosePlanButton.hidden = true;
   }
 
   function renderFavorites() {
