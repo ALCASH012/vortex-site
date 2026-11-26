@@ -234,3 +234,17 @@ dialog.vx-listing-detail > .vx-detail-status {
     grid-row: auto;
   }
 }
+
+/* Исправление: держим окно объявления по центру экрана */
+dialog.vx-listing-detail[open] {
+  position: fixed !important;
+  inset: auto !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  margin: 0 !important;
+  width: min(1040px, 94vw) !important;
+  max-height: 90vh !important;
+  max-height: 90dvh !important;
+  overflow: auto !important;
+}
