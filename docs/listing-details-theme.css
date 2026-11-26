@@ -248,3 +248,12 @@ dialog.vx-listing-detail[open] {
   max-height: 90dvh !important;
   overflow: auto !important;
 }
+
+
+/* Keep the native dialog out of document flow while closed. */
+dialog.vx-listing-detail:not([open]) {
+  display: none !important;
+}
+dialog.vx-listing-detail[open] {
+  display: grid !important;
+}
