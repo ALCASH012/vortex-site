@@ -1389,12 +1389,27 @@ dialog form { color: var(--ink); }
     function readListings() {
       try {
         const saved = localStorage.getItem(storageKey);
-        if (!saved) return [...seedListings];
-
+        if (!saved) return [];
         const parsed = JSON.parse(saved);
-              return Array.isArray(parsed) && parsed.length > 0 ? parsed : [...seedListings];
+        if (!Array.isArray(parsed)) return [];
+
+        const demoKeys = new Set(seedListings.map(x => JSON.stringify([
+          x.category, x.title, x.location, x.description, x.price, x.contact
+        ])));
+        const kept = parsed.filter(x =>
+          !x || typeof x !== "object"
+          || Object.prototype.hasOwnProperty.call(x, "createdAt")
+          || !demoKeys.has(JSON.stringify([
+            x.category, x.title, x.location, x.description, x.price, x.contact
+          ]))
+        );
+
+        if (kept.length !== parsed.length) {
+          try { localStorage.setItem(storageKey, JSON.stringify(kept)); } catch {}
+        }
+        return kept;
       } catch {
-        return [...seedListings];
+        return [];
       }
     }
 
