@@ -1,0 +1,236 @@
+dialog.vx-listing-detail {
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) minmax(270px, .9fr);
+  gap: 12px 18px;
+  width: min(1040px, 94vw);
+  max-width: 1040px;
+  max-height: 90vh;
+  overflow: auto;
+  padding: 22px;
+  border: 1px solid rgba(91, 157, 232, .38);
+  border-radius: 24px;
+  background: linear-gradient(145deg, #0b1728, #0d1d32) !important;
+  color: #eef5ff !important;
+  box-shadow: 0 28px 90px rgba(0, 0, 0, .66);
+}
+
+dialog.vx-listing-detail::backdrop {
+  background: rgba(2, 8, 18, .78);
+  backdrop-filter: blur(7px);
+}
+
+dialog.vx-listing-detail > .vx-detail-close {
+  position: absolute;
+  z-index: 2;
+  top: 14px;
+  right: 14px;
+  display: grid;
+  width: 42px;
+  height: 42px;
+  place-items: center;
+  border: 1px solid #2a4160;
+  border-radius: 50%;
+  background: #13253b;
+  color: #eef5ff !important;
+  font-size: 26px;
+}
+
+dialog.vx-listing-detail > .vx-detail-image {
+  grid-column: 1;
+  grid-row: 1;
+  display: block;
+  width: 100%;
+  max-height: 340px;
+  aspect-ratio: 16 / 8;
+  border-radius: 16px;
+  object-fit: cover;
+}
+
+dialog.vx-listing-detail > .vx-detail-image[hidden] {
+  display: none !important;
+}
+
+dialog.vx-listing-detail > .vx-detail-meta {
+  grid-column: 1;
+  grid-row: 2;
+  width: fit-content;
+  margin: 0;
+  padding: 7px 12px;
+  border: 1px solid #294362;
+  border-radius: 999px;
+  background: #152944;
+  color: #c6dcf5 !important;
+  font-size: 13px;
+}
+
+dialog.vx-listing-detail > #vx-detail-title {
+  grid-column: 1;
+  grid-row: 3;
+  margin: 0;
+  padding-right: 38px;
+  color: #f4f8ff !important;
+  font-size: clamp(24px, 3vw, 34px);
+  line-height: 1.15;
+}
+
+dialog.vx-listing-detail > .vx-detail-price {
+  grid-column: 1;
+  grid-row: 4;
+  margin: 0;
+  color: #60a5fa !important;
+  font-size: 25px;
+  font-weight: 800;
+}
+
+dialog.vx-listing-detail > .vx-detail-description {
+  grid-column: 1;
+  grid-row: 5;
+  margin: 0;
+  color: #dbe6f3 !important;
+  line-height: 1.65;
+}
+
+dialog.vx-listing-detail > .vx-detail-highlights,
+dialog.vx-listing-detail > .vx-detail-contact {
+  padding: 17px;
+  border: 1px solid rgba(91, 157, 232, .22);
+  border-radius: 16px;
+  background: linear-gradient(160deg, #132943, #102138);
+}
+
+dialog.vx-listing-detail > .vx-detail-highlights {
+  grid-column: 2;
+  grid-row: 1 / span 5;
+  align-self: stretch;
+  margin: 0;
+}
+
+dialog.vx-listing-detail .vx-detail-highlights h3 {
+  margin: 0 0 12px;
+  color: #f4f8ff;
+  font-size: 17px;
+}
+
+dialog.vx-listing-detail .vx-detail-highlights ul {
+  grid-template-columns: 1fr;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+dialog.vx-listing-detail .vx-detail-highlights li {
+  position: relative;
+  padding-left: 24px;
+  color: #e4edf8;
+  line-height: 1.45;
+}
+
+dialog.vx-listing-detail .vx-detail-highlights li::before {
+  position: absolute;
+  left: 0;
+  color: #35d07f;
+  content: "✓";
+  font-weight: 800;
+}
+
+dialog.vx-listing-detail .vx-detail-highlights-note {
+  margin: 14px 0 0;
+  color: #aebfd3 !important;
+  font-size: 12px;
+}
+
+dialog.vx-listing-detail > .vx-detail-contact {
+  grid-column: 2;
+  grid-row: 6;
+  align-self: start;
+  margin: 0;
+  color: #dbe6f3 !important;
+}
+
+dialog.vx-listing-detail > .vx-detail-contact::before {
+  display: block;
+  margin-bottom: 12px;
+  color: #f4f8ff;
+  content: "Связаться с автором";
+  font-size: 17px;
+  font-weight: 750;
+}
+
+dialog.vx-listing-detail .vx-detail-contact a,
+dialog.vx-listing-detail .vx-detail-contact button,
+dialog.vx-listing-detail .vx-detail-actions button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 42px;
+  padding: 10px 15px;
+  border: 1px solid #315579;
+  border-radius: 11px;
+  background: #17345a;
+  color: #eef5ff !important;
+  font: inherit;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+dialog.vx-listing-detail > .vx-detail-dates {
+  grid-column: 1;
+  grid-row: 6;
+  align-self: center;
+  margin: 0;
+  color: #aebfd3 !important;
+  font-size: 13px;
+}
+
+dialog.vx-listing-detail > .vx-detail-actions {
+  grid-column: 1 / -1;
+  grid-row: 7;
+  gap: 10px;
+  margin: 0;
+  padding-top: 15px;
+  border-top: 1px solid rgba(160, 190, 225, .18);
+}
+
+dialog.vx-listing-detail .vx-detail-actions [data-bump] {
+  border-color: transparent;
+  background: #145df5;
+  color: white !important;
+}
+
+dialog.vx-listing-detail .vx-detail-actions [data-delete] {
+  border-color: rgba(248, 80, 80, .45);
+  background: rgba(145, 35, 45, .3);
+  color: #ff9a9a !important;
+}
+
+dialog.vx-listing-detail > .vx-detail-status {
+  grid-column: 1 / -1;
+  grid-row: 8;
+  margin: 0;
+  color: #ffaaaa !important;
+}
+
+@media (max-width: 760px) {
+  dialog.vx-listing-detail {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+    padding: 16px;
+  }
+
+  dialog.vx-listing-detail > .vx-detail-image,
+  dialog.vx-listing-detail > .vx-detail-meta,
+  dialog.vx-listing-detail > #vx-detail-title,
+  dialog.vx-listing-detail > .vx-detail-price,
+  dialog.vx-listing-detail > .vx-detail-description,
+  dialog.vx-listing-detail > .vx-detail-highlights,
+  dialog.vx-listing-detail > .vx-detail-contact,
+  dialog.vx-listing-detail > .vx-detail-dates,
+  dialog.vx-listing-detail > .vx-detail-actions,
+  dialog.vx-listing-detail > .vx-detail-status {
+    grid-column: 1;
+    grid-row: auto;
+  }
+}
