@@ -70,3 +70,4 @@ self.addEventListener("notificationclick", event => {
     return self.clients.openWindow(targetUrl.href);
   })());
 });
+importScripts("./pwa-cache.js");
