@@ -227,6 +227,8 @@
     const light = settings.theme === "light"
       || (settings.theme === "system" && colorScheme?.matches);
     document.body.classList.toggle("light-theme", Boolean(light));
+    const themeMeta = document.querySelector('meta[name="theme-color"]');
+    if (themeMeta) themeMeta.content = light ? "#ffffff" : "#101316";
   }
 
   function applyFilters(force = false) {
