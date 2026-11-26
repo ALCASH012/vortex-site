@@ -47,7 +47,7 @@
       scroll-snap-type: none !important;
     }
     body[data-vx-layout="grid"] #cards {
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)) !important;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)) !important;
     }
     body[data-vx-layout="list"] #cards {
       grid-template-columns: 1fr !important;
