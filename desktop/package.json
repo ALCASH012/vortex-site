@@ -1,0 +1,57 @@
+{
+  "name": "vortex-desktop",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Настольная оболочка сайта ВОРТЕКС",
+  "engines": {
+    "node": ">=20"
+  },
+  "main": "main.cjs",
+  "scripts": {
+    "start": "electron .",
+    "dist:win": "electron-builder --win nsis --x64 --publish never",
+    "dist:linux": "electron-builder --linux AppImage --x64 --publish never"
+  },
+  "devDependencies": {
+    "electron": "^45.5.0",
+    "electron-builder": "^26.18.0"
+  },
+  "build": {
+    "appId": "com.alcash012.vortex",
+    "productName": "ВОРТЕКС",
+    "asar": true,
+    "directories": {
+      "buildResources": "assets",
+      "output": "release"
+    },
+    "files": [
+      "main.cjs",
+      "package.json",
+      "assets/icon.png"
+    ],
+    "win": {
+      "icon": "assets/icon.ico",
+      "artifactName": "Vortex-Setup-${version}-${arch}.${ext}"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "ВОРТЕКС",
+      "deleteAppDataOnUninstall": false
+    },
+    "linux": {
+      "icon": "assets/icon.png",
+      "category": "Network",
+      "artifactName": "Vortex-${version}-${arch}.${ext}",
+      "syncDesktopName": true
+    }
+  },
+  "overrides": {
+    "minimatch@>=7.0.0 <11.0.1": "11.0.1"
+  },
+  "productName": "ВОРТЕКС",
+  "desktopName": "vortex"
+}
