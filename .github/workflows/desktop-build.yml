@@ -3,6 +3,7 @@ name: Desktop builds
 on:
   workflow_dispatch:
   push:
+    tags: ['v*']
     branches:
       - main
     paths:
@@ -54,3 +55,40 @@ jobs:
           path: desktop/release/
           if-no-files-found: error
           retention-days: 14
+
+  release:
+    needs: [build]
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/v')
+    permissions:
+      contents: write
+    steps:
+      - name: Download Windows build
+        uses: actions/download-artifact@v4
+        with:
+          name: vortex-windows-x64
+          path: dist-win
+
+      - name: Download Linux build
+        uses: actions/download-artifact@v4
+        with:
+          name: vortex-linux-x64
+          path: dist-linux
+
+      - name: Stable asset names
+        run: |
+          set -e
+          find dist-win -name '*.exe' -exec cp {} Vortex-Setup-x64.exe \;
+          find dist-linux -name '*.AppImage' -exec cp {} Vortex-x86_64.AppImage \;
+          ls -lh Vortex-Setup-x64.exe Vortex-x86_64.AppImage
+          test -s Vortex-Setup-x64.exe
+          test -s Vortex-x86_64.AppImage
+
+      - name: Publish release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: ВОРТЕКС ${{ github.ref_name }}
+          generate_release_notes: true
+          files: |
+            Vortex-Setup-x64.exe
+            Vortex-x86_64.AppImage
